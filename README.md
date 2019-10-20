@@ -13,6 +13,7 @@
 - 💍 Cross-Server marriage system
 - 🔊 Music playback
 - ⁉️ Custom prefixes
+- 🎶 Osu! integration
 
 Right now a full command list is only available through `=help`
 
