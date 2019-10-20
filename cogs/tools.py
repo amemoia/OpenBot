@@ -65,11 +65,14 @@ def prefixcheck():
         fileIO('data/prefix/prefix.json', 'save', {})
 
 def client_role_color(self, ctx):
-    ClientMember = discord.utils.get(ctx.message.guild.members, id=self.client.user.id)
-    if ClientMember.color == discord.Color.default() or ClientMember.color.value == 0:
-        return 0x7289da
+    if ctx.message.guild != None:
+        ClientMember = discord.utils.get(ctx.message.guild.members, id=self.client.user.id)
+        if ClientMember.color == discord.Color.default() or ClientMember.color.value == 0:
+            return 0x7289da
+        else:
+            return ClientMember.color
     else:
-        return ClientMember.color
+        return 0x7289da
     
 def settingscheck():
     content = {

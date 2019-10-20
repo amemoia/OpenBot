@@ -80,13 +80,13 @@ class Admin(commands.Cog, name="admin"):
     @commands.command()
     async def invite(self, ctx):
         url = "https://discordapp.com/api/oauth2/authorize?client_id=635411383554539520&permissions=506981622&scope=bot"
-        embed = discord.Embed(title="✉️ Invite Link", description="You can invite me using [this link]({})".format(url))
+        embed = discord.Embed(title="📨 Invite Link", description="You can invite me using [this link]({})".format(url), color=0x7289da, timestamp=datetime.utcnow())
         embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
         await tools.dmauthor(self, ctx, embed)
-
-        embed=discord.Embed(title="✉️ Invite", description="Check your DMs! :page_facing_up:", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
-        embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
-        await ctx.send(embed=embed)
+        if ctx.guild != None:
+            embed=discord.Embed(title="📨 Invite", description="Check your DMs! :page_facing_up:", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+            await ctx.send(embed=embed)
 
     @commands.command()
     @commands.is_owner()
@@ -107,7 +107,8 @@ class Admin(commands.Cog, name="admin"):
             msg.add_field(name=x.name, value="ID: `" + str(x.id) + "`, " + str(len(x.members)) + " Members", inline=False)
         msg.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
         await tools.dmauthor(self, ctx, embed=msg)
-        await ctx.message.delete()
+        if ctx.guild != None: 
+            await ctx.message.delete()
 
     @commands.command()
     @commands.is_owner()
@@ -129,7 +130,6 @@ class Admin(commands.Cog, name="admin"):
         await ctx.send(embed=embed)
 
     @commands.command(name='eval')
-    @commands.guild_only()
     @commands.is_owner()
     async def _eval(self, ctx, *, command):
         if await self.client.is_owner(ctx.message.author) == True:
@@ -149,7 +149,13 @@ class Admin(commands.Cog, name="admin"):
                 embed=discord.Embed(title="🤖 Eval", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
                 embed.add_field(name="Output:", value="```py\n{}\n```".format(traceback.format_exc()), inline=False)
                 embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
-                await ctx.send(embed=embed)
+                if ctx.guild != None:
+                    msg=discord.Embed(title="🤖 Eval", description="I got an error, please check your DMs.", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+                    msg.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+                    await ctx.send(embed=msg)
+                    await tools.dmauthor(self, ctx, embed)
+                else:
+                    await ctx.send(embed=embed)
         else:
             embed=discord.Embed(title="🔴 Error", description="Only my owner can do that.", color=0xdd2e44, timestamp=datetime.utcnow())
             embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
