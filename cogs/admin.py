@@ -2,8 +2,8 @@ import discord
 from discord.ext import commands
 import time
 from datetime import datetime
-from tools import client_role_color
-import tools
+from cogs.tools import client_role_color
+import cogs.tools as tools
 from utils.dataIO import fileIO
 import traceback
 
@@ -155,4 +155,5 @@ class Admin(commands.Cog, name="admin"):
             await ctx.send(embed=embed)
 
 def setup(client):
+    tools.prefixcheck()
     client.add_cog(Admin(client))

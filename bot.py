@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from utils.dataIO import fileIO
 import cogs.tools as tools
+from datetime import datetime
 
 
 
@@ -34,9 +35,68 @@ default_prefix = sett["DEFAULT_PREFIX"]
 token = sett["TOKEN"]
 presence = sett["PRESENCE"]
 
-#       Startup
-
 client = commands.Bot(command_prefix=get_prefix, case_insensitive=True)
+
+#       Cog Loading
+
+@client.command()
+async def unload(ctx, extension):
+    if await client.is_owner(ctx.message.author) == True:
+        try:
+            client.unload_extension(extension)
+            print(">>>Unloaded {}".format(extension))
+            embed=discord.Embed(title="🔵 {}".format(client.user.name), description="Unloaded {}.".format(extension), color=0x55acee, timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=client.user.avatar_url, text="{}".format(client.user.name))
+            await ctx.send(embed=embed)
+        except Exception as error:
+            print("{} cannot be unloaded. [{}]".format(extension, error))
+            embed=discord.Embed(title="🔴 Error", description="{} cannot be unloaded.\n[{}]".format(extension, error), color=0xdd2e44, timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=client.user.avatar_url, text="{}".format(client.user.name))
+            await ctx.send(embed=embed)
+    else:
+        embed=discord.Embed(title="🔴 Error", description="Only my owner can do that.", color=0xdd2e44, timestamp=datetime.utcnow())
+        embed.set_footer(icon_url=client.user.avatar_url, text="{}".format(client.user.name))
+        await ctx.send(embed=embed)
+
+@client.command()
+async def reload(ctx, extension):
+    if await client.is_owner(ctx.message.author) == True:
+        try:
+            client.reload_extension("cogs." + extension)
+            print(">>>Reloaded {}".format(extension))
+            embed=discord.Embed(title="🔵 {}".format(client.user.name), description="Reloaded {}.".format(extension), color=0x55acee, timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=client.user.avatar_url, text="{}".format(client.user.name))
+            await ctx.send(embed=embed)
+        except Exception as error:
+            print("{} cannot be reloaded. [{}]".format(extension, error))
+            embed=discord.Embed(title="🔴 Error", description="{} cannot be reloaded.\n[{}]".format(extension, error), color=0xdd2e44, timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=client.user.avatar_url, text="{}".format(client.user.name))
+            await ctx.send(embed=embed)
+    else:
+        embed=discord.Embed(title="🔴 Error", description="Only my owner can do that.", color=0xdd2e44, timestamp=datetime.utcnow())
+        embed.set_footer(icon_url=client.user.avatar_url, text="{}".format(client.user.name))
+        await ctx.send(embed=embed)
+
+@client.command()
+async def load(ctx, extension):
+    if await client.is_owner(ctx.message.author) == True:
+        try:
+            client.load_extension("cogs." + extension)
+            print(">>>Loaded {}".format(extension))
+            embed=discord.Embed(title="🔵 {}".format(client.user.name), description="Loaded {}.".format(extension), color=0x55acee, timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=client.user.avatar_url, text="{}".format(client.user.name))
+            await ctx.send(embed=embed)
+        except Exception as error:
+            print("{} cannot be loaded. [{}]".format(extension, error))
+            embed=discord.Embed(title="🔴 Error", description="{} cannot be loaded.\n[{}]".format(extension, error), color=0xdd2e44, timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=client.user.avatar_url, text="{}".format(client.user.name))
+            await ctx.send(embed=embed)
+    else:
+        embed=discord.Embed(title="🔴 Error", description="Only my owner can do that.", color=0xdd2e44, timestamp=datetime.utcnow())
+        embed.set_footer(icon_url=client.user.avatar_url, text="{}".format(client.user.name))
+        await ctx.send(embed=embed)
+
+#       Startup
 
 @client.event
 async def on_ready():
@@ -59,9 +119,9 @@ async def on_ready():
 
 if __name__ == "__main__":
     for extension in extensions:
-        try:
-            client.load_extension('cogs.' + extension)
-        except Exception as error:
-            print("{} cannot be loaded. [{}]".format(extension, error))
+        #try:
+        client.load_extension("cogs." + extension)
+        #except Exception as error:
+        #    print("{} cannot be loaded. [{}]".format(extension, error))
 
     client.run(token)

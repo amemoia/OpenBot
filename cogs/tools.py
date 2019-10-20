@@ -57,12 +57,12 @@ async def dmauthor(self, ctx, embed):
     await userdm.send(embed=embed)
 
 def prefixcheck():
-    if not os.path.exists('data/payrespects'):
-        print('Creating data/payrespects folder...')
-        os.makedirs('data/payrespects')
-    if not fileIO('data/payrespects/data.json', 'check'):
-        print('Creating default data.json...')
-        fileIO('data/payrespects/data.json', 'save', {})
+    if not os.path.exists('data/prefix'):
+        print('Creating data/prefix folder...')
+        os.makedirs('data/prefix')
+    if not fileIO('data/prefix/prefix.json', 'check'):
+        print('Creating default prefix.json...')
+        fileIO('data/prefix/prefix.json', 'save', {})
 
 def client_role_color(self, ctx):
     ClientMember = discord.utils.get(ctx.message.guild.members, id=self.client.user.id)

@@ -3,3 +3,4 @@ run.bat
 utils/__pycache__/
 cogs/__pycache__/
 data/
+.vscode/launch.json
