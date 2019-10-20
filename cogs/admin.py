@@ -107,6 +107,7 @@ class Admin(commands.Cog, name="admin"):
             msg.add_field(name=x.name, value="ID: `" + str(x.id) + "`, " + str(len(x.members)) + " Members", inline=False)
         msg.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
         await tools.dmauthor(self, ctx, embed=msg)
+        await ctx.message.delete()
 
     @commands.command()
     @commands.is_owner()

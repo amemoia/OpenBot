@@ -66,7 +66,7 @@ def prefixcheck():
 
 def client_role_color(self, ctx):
     ClientMember = discord.utils.get(ctx.message.guild.members, id=self.client.user.id)
-    if ClientMember.color == discord.Color.default:
+    if ClientMember.color == discord.Color.default() or ClientMember.color.value == 0:
         return 0x7289da
     else:
         return ClientMember.color
