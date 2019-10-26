@@ -56,13 +56,14 @@ async def dmauthor(self, ctx, embed):
         pass
     await userdm.send(embed=embed)
 
-def prefixcheck():
-    if not os.path.exists('data/prefix'):
-        print('Creating data/prefix folder...')
-        os.makedirs('data/prefix')
-    if not fileIO('data/prefix/prefix.json', 'check'):
-        print('Creating default prefix.json...')
-        fileIO('data/prefix/prefix.json', 'save', {})
+async def send_cmdinfo(self, ctx, info):
+    embed = discord.Embed(title="📕 Help", color=0x7289da)
+    embed.add_field(name=info.cmd_name, value=info.cmd_desc, inline=False)
+    embed.add_field(name="Aliases", value=info.cmd_alias, inline=False)
+    embed.add_field(name="Category", value=info.cmd_categ, inline=False)
+    embed.add_field(name="Requirements", value=info.cmd_req, inline=False)
+    embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+    await ctx.send(embed=embed)
 
 def client_role_color(self, ctx):
     if ctx.message.guild != None:
@@ -73,6 +74,14 @@ def client_role_color(self, ctx):
             return ClientMember.color
     else:
         return 0x7289da
+
+def prefixcheck():
+    if not os.path.exists('data/prefix'):
+        print('Creating data/prefix folder...')
+        os.makedirs('data/prefix')
+    if not fileIO('data/prefix/prefix.json', 'check'):
+        print('Creating default prefix.json...')
+        fileIO('data/prefix/prefix.json', 'save', {})
     
 def settingscheck():
     content = {

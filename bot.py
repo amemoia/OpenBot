@@ -30,12 +30,12 @@ def get_prefix(client, message):
     prefix = prefixes[str(message.guild.id)]
     return commands.when_mentioned_or(prefix)(client, message)
 
-extensions = ["admin"]
+extensions = ["help", "admin"]
 default_prefix = sett["DEFAULT_PREFIX"]
 token = sett["TOKEN"]
 presence = sett["PRESENCE"]
 
-client = commands.Bot(command_prefix=get_prefix, case_insensitive=True)
+client = commands.Bot(command_prefix=get_prefix, case_insensitive=True, help_command=None)
 
 #       Cog Loading
 
