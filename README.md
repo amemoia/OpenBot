@@ -17,11 +17,22 @@
 
 Right now a full command list is only available through `=help`
 
-#### Hosting Requirements
+## Owner-only commands
+- `=status` set the bot's status message
+- `=guildlist` sends a list of guilds the bot is in alongside their IDs
+- `=leaveguild [guild.id]` leaves the guild with the given ID
+- `=eval [code]` runs the given code, DMs you if there's any errors
+
+## Hosting
+
+#### Requirements
+- <a href="https://www.python.org/downloads/"> Python </a> (duh)
 - <a href="https://github.com/Rapptz/discord.py">Discord.py</a> (voice support is not required right now)
 - An IDE, for example <a href="https://code.visualstudio.com">Visual Studio Code</a> is highly recommended
 
 #### How to host
 - Clone the repository
-- Start the run.bat
-- Paste your bot token into the window
+- Create a `.bat` file which runs `bot.py` and open it
+- When prompted, paste your bot token into the window
+
+Default prefix and status can be changed within `settings.json`
