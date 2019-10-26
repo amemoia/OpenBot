@@ -18,7 +18,7 @@
 Right now a full command list is only available through `=help`
 
 ## Owner-only commands
-- `=status` set the bot's status message
+- `=status [str]` set the bot's status message without changing the default status
 - `=guildlist` sends a list of guilds the bot is in alongside their IDs
 - `=leaveguild [guild.id]` leaves the guild with the given ID
 - `=eval [code]` runs the given code, DMs you if there's any errors
@@ -26,7 +26,7 @@ Right now a full command list is only available through `=help`
 ## Hosting
 
 #### Requirements
-- <a href="https://www.python.org/downloads/"> Python </a> (duh)
+- <a href="https://www.python.org/downloads/"> Python </a>
 - <a href="https://github.com/Rapptz/discord.py">Discord.py</a> (voice support is not required right now)
 - An IDE, for example <a href="https://code.visualstudio.com">Visual Studio Code</a> is highly recommended
 
