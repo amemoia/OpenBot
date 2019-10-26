@@ -26,7 +26,7 @@ Right now a full command list is only available through `=help`
 ## Hosting
 
 #### Requirements
-- <a href="https://www.python.org/downloads/"> Python </a> (duh)
+- <a href="https://www.python.org/downloads/"> Python </a>
 - <a href="https://github.com/Rapptz/discord.py">Discord.py</a> (voice support is not required right now)
 - An IDE, for example <a href="https://code.visualstudio.com">Visual Studio Code</a> is highly recommended
 
