@@ -165,5 +165,5 @@ class Admin(commands.Cog, name="admin"):
             await ctx.send(embed=embed)
 
 def setup(client):
-    tools.prefixcheck()
+    tools.jsoncheck()
     client.add_cog(Admin(client))

@@ -75,13 +75,19 @@ def client_role_color(self, ctx):
     else:
         return 0x7289da
 
-def prefixcheck():
-    if not os.path.exists('data/prefix'):
-        print('Creating data/prefix folder...')
-        os.makedirs('data/prefix')
-    if not fileIO('data/prefix/prefix.json', 'check'):
+def jsoncheck():
+    if not os.path.exists('data/write'):
+        print('Creating data/write folder...')
+        os.makedirs('data/write')
+    #    PREFIX
+    if not fileIO('data/write/prefix.json', 'check'):
         print('Creating default prefix.json...')
-        fileIO('data/prefix/prefix.json', 'save', {})
+        fileIO('data/write/prefix.json', 'save', {})
+    #    PAYRESPECTS
+    if not fileIO('data/write/payrespects.json', 'check'):
+        print('Creating default payrespects.json...')
+        fileIO('data/write/payrespects.json', 'save', {})
+
     
 def settingscheck():
     content = {

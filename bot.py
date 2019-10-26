@@ -21,16 +21,16 @@ if sett["TOKEN"] == "None":
     fileIO("settings.json", "save", sett)
 
 def get_prefix(client, message):
-    tools.prefixcheck()
+    tools.jsoncheck()
     if not message.guild:
         return commands.when_mentioned_or(default_prefix)(client, message)
-    prefixes = fileIO("data/prefix/prefix.json", "load")
+    prefixes = fileIO("data/write/prefix.json", "load")
     if str(message.guild.id) not in prefixes:
         return commands.when_mentioned_or(default_prefix)(client, message)
     prefix = prefixes[str(message.guild.id)]
     return commands.when_mentioned_or(prefix)(client, message)
 
-extensions = ["help", "admin"]
+extensions = ["help", "admin", "fun"]
 default_prefix = sett["DEFAULT_PREFIX"]
 token = sett["TOKEN"]
 presence = sett["PRESENCE"]
