@@ -1,4 +1,5 @@
-import discord
+import discord 
+import inspect
 from discord.ext import commands
 import time
 from datetime import datetime
@@ -134,10 +135,12 @@ class Admin(commands.Cog, name="admin"):
     async def _eval(self, ctx, *, command):
         if await self.client.is_owner(ctx.message.author) == True:
             try:
+                command = command.strip("`")
                 res = eval(command)
                 if inspect.isawaitable(res):
+                    res = await res
                     embed=discord.Embed(title="🤖 Eval", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
-                    embed.add_field(name="Output:", value="```py\n{}\n```".format(await res), inline=False)
+                    embed.add_field(name="Output:", value="```py\n{}\n```".format(res), inline=False)
                     embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
                     await ctx.send(embed=embed)
                 else:
