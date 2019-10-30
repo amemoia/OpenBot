@@ -1,4 +1,4 @@
-import discord 
+import discord
 import inspect
 from discord.ext import commands
 import time
@@ -13,25 +13,29 @@ class Admin(commands.Cog, name="admin"):
         self.client = client
 
     @commands.command()
-    async def test(self, ctx):  
+    async def test(self, ctx):
+        """Responds with an embed."""
         embed=discord.Embed(title="🔵 Test", description="Hello! :wave:", color=0x55acee, timestamp=datetime.utcnow())
         embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
         await ctx.send(embed=embed)
 
     @commands.command()
     async def testerror(self, ctx):
+        """Responds with a error embed."""
         embed=discord.Embed(title="🔴 Error", description="This is an error.", color=0xdd2e44, timestamp=datetime.utcnow())
         embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
         await ctx.send(embed=embed)
 
     @commands.command()
     async def testwarning(self, ctx):
+        """Responds with a warning embed."""
         embed=discord.Embed(title="⚠️ Warning", description="This is a warning.", color=0xffcd4c, timestamp=datetime.utcnow())
         embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
         await ctx.send(embed=embed)
 
     @commands.command()
     async def ping(self, ctx):
+        """Sends the bot's latency."""
         channel = ctx.message.channel
         t1 = time.perf_counter()
         await channel.trigger_typing()
@@ -43,6 +47,7 @@ class Admin(commands.Cog, name="admin"):
 
     @commands.command()
     async def say(self, ctx, *args):
+        """Repeats after you."""
         msg = " ".join(args)
         await ctx.send(msg)
         await ctx.message.delete()
@@ -50,6 +55,7 @@ class Admin(commands.Cog, name="admin"):
     @commands.command()
     @commands.guild_only()
     async def prefix(self, ctx, *, prefix):
+        """Changes the prefix for this server."""
         if self.client.is_owner(ctx.message.author) == True or ctx.message.author.guild_permissions.manage_guild == True:
             predata = "data/prefix/prefix.json"
             db = fileIO(predata, "load")
@@ -80,7 +86,8 @@ class Admin(commands.Cog, name="admin"):
 
     @commands.command()
     async def invite(self, ctx):
-        url = "https://discordapp.com/api/oauth2/authorize?client_id=635411383554539520&permissions=506981622&scope=bot"
+        """Sends the bot's invite link."""
+        url = discord.utils.oauth_url(client_id=self.client.user.id, permissions=discord.Permissions(permissions=1609952503))
         embed = discord.Embed(title="📨 Invite Link", description="You can invite me using [this link]({})".format(url), color=0x7289da, timestamp=datetime.utcnow())
         embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
         await tools.dmauthor(self, ctx, embed)
@@ -92,6 +99,7 @@ class Admin(commands.Cog, name="admin"):
     @commands.command()
     @commands.is_owner()
     async def status(self, ctx, *args):
+        """Changes the bot's status."""
         game = " ".join(args)
         if str(game) == "":
             return
@@ -103,6 +111,7 @@ class Admin(commands.Cog, name="admin"):
     @commands.command()
     @commands.is_owner()
     async def guildlist(self, ctx):
+        """Sends a list of guilds the bot is in alongside their IDs."""
         msg = discord.Embed(title="📃 Guild list", description="Currently in {} guilds, those are:".format(len(self.client.guilds)), color=client_role_color(self, ctx))
         for x in self.client.guilds:
             msg.add_field(name=x.name, value="ID: `" + str(x.id) + "`, " + str(len(x.members)) + " Members", inline=False)
@@ -114,6 +123,7 @@ class Admin(commands.Cog, name="admin"):
     @commands.command()
     @commands.is_owner()
     async def leaveguild(self, ctx, id: int = 0000000):
+        """Leaves a guild with the provided ID."""
         if id == 0000000:
             embed=discord.Embed(title="🔴 Error", description="You need to provide a valid guild ID.", color=0xdd2e44, timestamp=datetime.utcnow())
             embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
@@ -125,7 +135,12 @@ class Admin(commands.Cog, name="admin"):
             embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
             await ctx.send(embed=embed)
             return
-        await guild.leave()
+        try:
+            await guild.leave()
+        except:
+            embed=discord.Embed(title="🔴 Error", description="I'm not in that guild.", color=0xdd2e44, timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+            return await ctx.send(embed=embed)
         embed=discord.Embed(title="👋 Leave Guild", description="Successfully left the guild.", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
         embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
         await ctx.send(embed=embed)
@@ -133,6 +148,7 @@ class Admin(commands.Cog, name="admin"):
     @commands.command(name='eval')
     @commands.is_owner()
     async def _eval(self, ctx, *, command):
+        """Evaluates some code."""
         if await self.client.is_owner(ctx.message.author) == True:
             try:
                 command = command.strip("`")

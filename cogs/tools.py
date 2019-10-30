@@ -57,11 +57,10 @@ async def dmauthor(self, ctx, embed):
     await userdm.send(embed=embed)
 
 async def send_cmdinfo(self, ctx, info):
-    embed = discord.Embed(title="📕 Help", color=0x7289da)
-    embed.add_field(name=info.cmd_name, value=info.cmd_desc, inline=False)
-    embed.add_field(name="Aliases", value=info.cmd_alias, inline=False)
-    embed.add_field(name="Category", value=info.cmd_categ, inline=False)
-    embed.add_field(name="Requirements", value=info.cmd_req, inline=False)
+    embed = discord.Embed(title="📕 Help", color=0x7289da, timestamp=datetime.utcnow())
+    embed.add_field(name=info["cmd_name"], value=info["cmd_desc"], inline=False)
+    embed.add_field(name="Aliases", value=info["cmd_alias"], inline=False)
+    embed.add_field(name="Usage", value=info["cmd_format"], inline=False)
     embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
     await ctx.send(embed=embed)
 
@@ -87,7 +86,6 @@ def jsoncheck():
     if not fileIO('data/write/payrespects.json', 'check'):
         print('Creating default payrespects.json...')
         fileIO('data/write/payrespects.json', 'save', {})
-
     
 def settingscheck():
     content = {
@@ -98,3 +96,17 @@ def settingscheck():
     if not fileIO('settings.json', 'check'):
         print('Creating default prefix.json...')
         fileIO('settings.json', 'save', content)
+
+def get_prefix(self, ctx):
+    jsoncheck()
+    prefixes = fileIO("data/write/prefix.json", "load")
+    settings = fileIO("settings.json", "load")
+    default_prefix = settings["DEFAULT_PREFIX"]
+
+    if not ctx.guild:
+        return default_prefix
+    elif str(ctx.guild.id) not in prefixes:
+        return default_prefix
+    else:
+        prefix = prefixes[str(ctx.guild.id)]
+        return prefix
