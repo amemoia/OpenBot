@@ -57,7 +57,7 @@ class Admin(commands.Cog, name="admin"):
     async def prefix(self, ctx, *, prefix):
         """Changes the prefix for this server."""
         if self.client.is_owner(ctx.message.author) == True or ctx.message.author.guild_permissions.manage_guild == True:
-            predata = "data/prefix/prefix.json"
+            predata = "data/write/prefix.json"
             db = fileIO(predata, "load")
             channel = ctx.message.channel
             author = ctx.message.author
