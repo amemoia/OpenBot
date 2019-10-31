@@ -284,13 +284,47 @@ class General(commands.Cog, name='general'):
         """Returns the server's icon."""
         user = ctx.message.guild
         icon = user.icon_url
-        if icon == None:
+        if icon._url == None:
             embed=discord.Embed(title="🔴 Error", description="**{}** has no icon.".format(user), colour=0xdd2e44, timestamp=datetime.utcnow())
             embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
             embed.set_image(url=str(icon))
             await ctx.send(embed=embed)
         else:
             embed=discord.Embed(title="🔵 Here's **{}'s** icon.".format(user), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+            embed.set_image(url=str(icon))
+            embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+            await ctx.send(embed=embed)
+
+    @commands.command()
+    @commands.guild_only()
+    async def banner(self, ctx):
+        """Returns the server's banner."""
+        user = ctx.message.guild
+        icon = user.banner_url
+        if icon._url == None:
+            embed=discord.Embed(title="🔴 Error", description="**{}** has no banner.".format(user), colour=0xdd2e44, timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+            embed.set_image(url=str(icon))
+            await ctx.send(embed=embed)
+        else:
+            embed=discord.Embed(title="🔵 Here's **{}'s** banner.".format(user), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+            embed.set_image(url=str(icon))
+            embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+            await ctx.send(embed=embed)
+
+    @commands.command()
+    @commands.guild_only()
+    async def splash(self, ctx):
+        """Returns the server's invite splash."""
+        user = ctx.message.guild
+        icon = user.splash_url
+        if icon._url == None:
+            embed=discord.Embed(title="🔴 Error", description="**{}** has no invite splash.".format(user), colour=0xdd2e44, timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+            embed.set_image(url=str(icon))
+            await ctx.send(embed=embed)
+        else:
+            embed=discord.Embed(title="🔵 Here's **{}'s** invite splash.".format(user), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
             embed.set_image(url=str(icon))
             embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
             await ctx.send(embed=embed)
