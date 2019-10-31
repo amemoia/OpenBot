@@ -12,7 +12,6 @@ class Fun(commands.Cog, name="fun"):
         self.client = client
 
     @commands.command()
-    @commands.guild_only()
     async def kill(self, ctx, user: discord.Member = None):
         """Murder someone."""
         author = ctx.message.author
@@ -46,7 +45,6 @@ class Fun(commands.Cog, name="fun"):
             return await ctx.send(embed=embed)
     
     @commands.command()
-    @commands.guild_only()
     async def insult(self, ctx, user: discord.Member = None):
         """Insult someone."""
         if user == None:
@@ -65,7 +63,6 @@ class Fun(commands.Cog, name="fun"):
             return await ctx.send(embed=embed)
 
     @commands.command(aliases=['cuddle'])
-    @commands.guild_only()
     async def hug(self, ctx, user: discord.Member=None):
         """Free hugs!"""
         author = ctx.message.author
@@ -85,7 +82,6 @@ class Fun(commands.Cog, name="fun"):
         return await ctx.send(embed=embed) 
 
     @commands.command(aliases=['8ball'])
-    @commands.guild_only()
     async def ask8(self, ctx):
         """Ask the almighty 8ball a question."""
         response=(random.choice(["It is certain :8ball:",
@@ -108,7 +104,6 @@ class Fun(commands.Cog, name="fun"):
         await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.guild_only()
     async def roll(self, ctx, number : int = 20):
         """Roll some dice."""
         author = ctx.message.author
@@ -123,7 +118,6 @@ class Fun(commands.Cog, name="fun"):
             await ctx.send(embed=embed)
 
     @commands.command(aliases=['pick'])
-    @commands.guild_only()
     async def choose(self, ctx, *choices: str):
         """Chooses between given options at random."""
         if len(choices) < 2:
@@ -136,7 +130,6 @@ class Fun(commands.Cog, name="fun"):
             await ctx.send(embed=embed)
 
     @commands.command(aliases=['coinflip'])
-    @commands.guild_only()
     async def flip(self, ctx):
         """Flip a coin."""
         embed=discord.Embed(title="📀 Coinflip", description=random.choice(["Heads!", "Tails!"]), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
@@ -144,7 +137,6 @@ class Fun(commands.Cog, name="fun"):
         await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.guild_only()
     async def rapname(self, ctx, user: discord.Member=None):
         """Start off your Soundcloud career with a cool nickname."""
         if user == None:
@@ -161,7 +153,6 @@ class Fun(commands.Cog, name="fun"):
         await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.guild_only()
     async def gay(self, ctx, user: discord.Member=None):
         """Measures how gay you are."""
         if not user:
@@ -187,7 +178,6 @@ class Fun(commands.Cog, name="fun"):
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['dick', 'dong'])
-    @commands.guild_only()
     async def penis(self, ctx, user: discord.Member=None):
         """Measures your dick size. 100% accurate"""
         if not user:
@@ -209,7 +199,6 @@ class Fun(commands.Cog, name="fun"):
         await ctx.send(msg)
 
     @commands.command(aliases=['f'])
-    @commands.guild_only()
     async def payrespects(self, ctx):
         """Send `=f` to pay respects"""
         db = fileIO("data/write/payrespects.json", "load")

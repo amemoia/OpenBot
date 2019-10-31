@@ -11,7 +11,6 @@ class General(commands.Cog, name='general'):
         self.client = client
 
     @commands.command(aliases=['profile'])
-    @commands.guild_only()
     async def userinfo(self, ctx, *, user: discord.Member = None):
         """Sends some information about a given user."""
         author = ctx.message.author
@@ -219,7 +218,6 @@ class General(commands.Cog, name='general'):
             await ctx.send("I need the `Embed links` permission to do this.")
 
     @commands.command()
-    @commands.guild_only()
     async def calc(self, ctx, *, maths):
         """Does the math for you"""
         equation = maths.strip().replace('^', '**').replace('x', '*')
@@ -270,7 +268,6 @@ class General(commands.Cog, name='general'):
             await ctx.send(embed=embed)
 
     @commands.command(aliases=['pfp', 'icon'])
-    @commands.guild_only()
     async def avatar(self, ctx, user: discord.User = None):
         """Returns a user's avatar."""
         if not user:
