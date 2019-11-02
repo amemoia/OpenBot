@@ -32,16 +32,16 @@ class Fun(commands.Cog, name="fun"):
 
         if user == author:
             embed=discord.Embed(title="💀 Kill", description="I won't let you kill yourself!", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
-            embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
             return await ctx.send(embed=embed)
         elif user.id == self.client.user.id:
             embed=discord.Embed(title="💀 Kill", description="I refuse to kill myself!", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
-            embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
             return await ctx.send(embed=embed)
         else:
             message = str(random.choice(kills)).format(user=user.display_name, killer=author.display_name)
             embed=discord.Embed(title="💀 Kill", description=message, color=client_role_color(self, ctx), timestamp=datetime.utcnow())
-            embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
             return await ctx.send(embed=embed)
     
     @commands.command()
@@ -55,11 +55,11 @@ class Fun(commands.Cog, name="fun"):
             user = ctx.message.author
             msg = "How original. No one else had thought of trying to get the bot to insult itself. I applaud your creativity. Yawn. Perhaps this is why you don't have friends. You don't add anything new to any conversation. You are more of a bot than me, predictable answers, and absolutely dull to have an actual conversation with."
             embed=discord.Embed(title="😡 Insult", description=msg, color=client_role_color(self, ctx), timestamp=datetime.utcnow())
-            embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
             return await ctx.send(embed=embed)
         else:
             embed=discord.Embed(title="😡 Insult", description=user.mention + " " + random.choice(insults), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
-            embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
             return await ctx.send(embed=embed)
 
     @commands.command(aliases=['cuddle'])
@@ -100,7 +100,7 @@ class Fun(commands.Cog, name="fun"):
                                 "Outlook not so good :8ball:",
                                 "Very doubtful :8ball:"]))
         embed=discord.Embed(title="🎱 8ball", description=response, color=client_role_color(self, ctx), timestamp=datetime.utcnow())
-        embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+        embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -110,11 +110,11 @@ class Fun(commands.Cog, name="fun"):
         if number > 1:
             n = random.randint(1, number)
             embed=discord.Embed(title="🎲 Roll", description="{}".format(n), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
-            embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
             await ctx.send(embed=embed)
         else:
             embed=discord.Embed(title="🎲 Roll", description="{} Maybe higher than 1?".format(author.mention), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
-            embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
             await ctx.send(embed=embed)
 
     @commands.command(aliases=['pick'])
@@ -122,18 +122,18 @@ class Fun(commands.Cog, name="fun"):
         """Chooses between given options at random."""
         if len(choices) < 2:
             embed=discord.Embed(title="🔴 Error", description='Not enough choices to pick from.', color=0xdd2e44, timestamp=datetime.utcnow())
-            embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
             await ctx.send(embed=embed)
         else:
             embed=discord.Embed(title="🔮 Choose", description="I'd pick {}.".format(random.choice(choices)), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
-            embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
             await ctx.send(embed=embed)
 
     @commands.command(aliases=['coinflip'])
     async def flip(self, ctx):
         """Flip a coin."""
         embed=discord.Embed(title="📀 Coinflip", description=random.choice(["Heads!", "Tails!"]), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
-        embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+        embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -149,7 +149,7 @@ class Fun(commands.Cog, name="fun"):
 
         result = random.choice(rap1) + " " + random.choice(rap2)
         embed=discord.Embed(title="🎤 Rapname", description="{}'s rap name is: **{}**".format(user.mention, result), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
-        embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+        embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -174,7 +174,7 @@ class Fun(commands.Cog, name="fun"):
             emoji = ":gay_pride_flag:"
 
         embed=discord.Embed(title="🏳️‍🌈 Gay", description="{} is **{}% gay.** {}".format(user, n, emoji), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
-        embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+        embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['dick', 'dong'])
@@ -213,7 +213,7 @@ class Fun(commands.Cog, name="fun"):
         TotalLen = len(db)
 
         embed=discord.Embed(title="{} has paid their respects".format(ctx.message.author.name), description="{} Today, {} Total".format(TodayLen, TotalLen), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
-        embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+        embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
         await ctx.send(embed=embed)
 
 def setup(client):

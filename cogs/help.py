@@ -28,17 +28,17 @@ class Help(commands.Cog, name="help"):
                     mcommand = discord.utils.get(self.client.commands, aliases=x)
 
         if mcommand == None:
-            general = "`invite` `ping` `profile` `guild` `calc` `assign` `avatar` `guildicon`"
+            general = "`invite` `ping` `profile` `guild` `calc` `assign` `avatar` `guildicon` `get_user` `get_guild`"
             fun = "`say` `kill` `insult` `hug` `8ball` `roll` `choose` `coinflip` `rapname` `gay` `penis` `payrespects`"
-            mod = "None yet.."
-            admin = "`prefix`"
+            mod = "`kick` `ban` `hackban` `strike` `strikes` `rmstrike` `clear`"
+            admin = "`prefix` `setup`"
 
             embed = discord.Embed(title="📕 Help", description="My prefix on this server is `{pre}`. Alternatively, just @ me. \nFor more information on a command, send `{pre}help [command]`".format(pre=self.pre), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
             embed.add_field(name="🔷 General", value=general, inline=False)
             embed.add_field(name="🎮 Fun", value=fun, inline=False)
             embed.add_field(name="🔨 Moderation", value=mod, inline=False)
             embed.add_field(name="🔶 Server Admin", value=admin, inline=False)
-            embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
             await ctx.send(embed=embed)
         else:
             if mcommand.aliases == None:
@@ -84,11 +84,11 @@ class Help(commands.Cog, name="help"):
     async def botinfo(self, ctx):
         """Information about the bot."""
         embed = discord.Embed(title="🤖 About", description="Based on [OpenBot](https://github.com/notLeM/OpenBot), an open-source discord bot by [notLeM](https://github.com/notLeM).", timestamp=datetime.utcnow(), color=client_role_color(self, ctx))
-        embed.add_field(name="OpenBot version", value="Alpha 4.1")
+        embed.add_field(name="OpenBot version", value="Alpha 5.0")
         embed.add_field(name="Servers", value=len(self.client.guilds))
         embed.add_field(name="Commands", value=len(self.client.commands))
         embed.add_field(name="\u200b", value="[Invite]({}) • [OpenBot Website](https://notlem.github.io/)".format(discord.utils.oauth_url(client_id=self.client.user.id, permissions=discord.Permissions(permissions=1609952503))), inline=False)
-        embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+        embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
         await ctx.send(embed=embed)
 
 def setup(client):

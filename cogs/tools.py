@@ -44,7 +44,7 @@ async def errorcheck(self, ctx, error):
     if msg == None:
         msg = "```{}```".format(error)
     embed=discord.Embed(title="🔴 Error", description=msg, color=0xdd2e44)
-    embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+    embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
     await ctx.send(embed=embed)
 
 async def dmauthor(self, ctx, embed):
@@ -61,7 +61,7 @@ async def send_cmdinfo(self, ctx, info):
     embed.add_field(name=info["cmd_name"], value=info["cmd_desc"], inline=False)
     embed.add_field(name="Aliases", value=info["cmd_alias"], inline=False)
     embed.add_field(name="Usage", value=info["cmd_format"], inline=False)
-    embed.set_footer(icon_url=self.client.user.avatar_url, text="{}".format(self.client.user.name))
+    embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
     await ctx.send(embed=embed)
 
 def client_role_color(self, ctx):
@@ -73,6 +73,72 @@ def client_role_color(self, ctx):
             return ClientMember.color
     else:
         return 0x7289da
+
+async def modlog_toggle_messages(self, ctx, msg):
+    guild = ctx.message.guild
+    db = fileIO(self.path, "load")
+    if db[str(guild.id)]["MODLOG"]["MESSAGES"] == False:
+        db[str(guild.id)]["MODLOG"]["MESSAGES"] = True
+        fileIO(self.path, "save", db)
+        embed=discord.Embed(title=":notepad_spiral: Modlog", description="Enabled {}.".format(msg), color=client_role_color(self, ctx))
+        await ctx.send(embed=embed)
+    elif db[str(guild.id)]["MODLOG"]["MESSAGES"] == True:
+        db[str(guild.id)]["MODLOG"]["MESSAGES"] = False
+        fileIO(self.path, "save", db)
+        embed=discord.Embed(title=":notepad_spiral: Modlog", description="Disabled {}.".format(msg), color=client_role_color(self, ctx))
+        await ctx.send(embed=embed)
+    elif db[str(guild.id)]["MODLOG"]["MESSAGES"] == None:
+        db[str(guild.id)]["MODLOG"]["MESSAGES"] = True
+        fileIO(self.path, "save", db)
+        embed=discord.Embed(title=":notepad_spiral: Modlog", description="Enabled {}.".format(msg), color=client_role_color(self, ctx))
+        await ctx.send(embed=embed)
+
+
+async def log_strike(self, ctx, user, strike_data, strikeID):
+    guild = ctx.guild
+    striker = strike_data["Author"]
+    reason = strike_data["Reason"]
+    if str(guild.id) not in self.db:
+        return
+    if user == None:
+        return
+    channelid = self.db[str(guild.id)]["CHANNEL"]
+    logchannel = guild.get_channel(int(channelid))
+    time = datetime.now()
+    fmt = '%H:%M:%S'
+    name = str(user)
+        
+    logmsg = '{} has recieved a strike from {}'.format(name, striker)
+    embedmsg = discord.Embed(title=logmsg, color=discord.Color.green())
+    embedmsg.add_field(name="Reason:", value=reason, inline=False)
+    embedmsg.add_field(name="Strike ID:", value=str(strikeID), inline=False)
+    embedmsg.set_footer(text=time.strftime(fmt))
+    await logchannel.send(embed=embedmsg)
+    return
+
+async def log_merit(self, ctx, user, merit_data, meritID):
+    guild = ctx.guild
+    meriter = merit_data["Author"]
+    reason = merit_data["Reason"]
+    if str(guild.id) not in self.db:
+        return
+    if self.db[str(guild.id)]["toggleuser"] == False:
+        return
+    if user == None:
+        return
+    channelid = self.db[str(guild.id)]["CHANNEL"]
+    logchannel = guild.get_channel(int(channelid))
+    time = datetime.now()
+    fmt = '%H:%M:%S'
+    name = str(user)
+        
+    logmsg = '{} has recieved a merit from {}'.format(name, meriter)
+    embedmsg = discord.Embed(title=logmsg, color=discord.Color.green())
+    embedmsg.add_field(name="Reason:", value=reason, inline=False)
+    embedmsg.add_field(name="Merit ID:", value=str(meritID), inline=False)
+    embedmsg.set_footer(text=time.strftime(fmt))
+    await logchannel.send(embed=embedmsg)
+    return
 
 def jsoncheck():
     if not os.path.exists('data/write'):
@@ -86,6 +152,17 @@ def jsoncheck():
     if not fileIO('data/write/payrespects.json', 'check'):
         print('Creating default payrespects.json...')
         fileIO('data/write/payrespects.json', 'save', {})
+    #    STRIKE
+    if not fileIO('data/write/strikes.json', 'check'):
+        print('Creating default strikes.json...')
+        fileIO('data/write/strikes.json', 'save', {})
+    #    MERIT
+    if not fileIO('data/write/merits.json', 'check'):
+        print('Creating default merits.json...')
+        fileIO('data/write/merits.json', 'save', {})
+    if not fileIO('data/write/setup.json', 'check'):
+        print('Creating default setup.json...')
+        fileIO('data/write/setup.json', 'save', {})
     
 def settingscheck():
     content = {

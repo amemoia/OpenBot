@@ -30,7 +30,7 @@ def get_prefix(client, message):
     prefix = prefixes[str(message.guild.id)]
     return commands.when_mentioned_or(prefix)(client, message)
 
-extensions = ["help", "admin", "fun", "general"]
+extensions = ["help", "admin", "mod", "fun", "general", "strike", "merit", "setup"]
 default_prefix = sett["DEFAULT_PREFIX"]
 token = sett["TOKEN"]
 presence = sett["PRESENCE"]
