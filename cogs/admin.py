@@ -3,7 +3,7 @@ import inspect
 from discord.ext import commands
 import time
 from datetime import datetime
-from cogs.tools import client_role_color
+from cogs.tools import client_role_color, errorcheck
 import cogs.tools as tools
 from utils.dataIO import fileIO
 import traceback
@@ -179,6 +179,10 @@ class Admin(commands.Cog, name="admin"):
             embed=discord.Embed(title="🔴 Error", description="Only my owner can do that.", color=0xdd2e44, timestamp=datetime.utcnow())
             embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
             await ctx.send(embed=embed)
+
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx, error):
+        await errorcheck(self, ctx, error)
 
 def setup(client):
     tools.jsoncheck()
