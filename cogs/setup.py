@@ -125,7 +125,9 @@ class Setup(commands.Cog, name="setup"):
 
         self.db[guildstr]["AGREE"]["ROLE"] = str(memberrole.id)
 
-        for x in guild.members:
+        memberlist = guild.members
+        memberlist.remove(guild.me)
+        for x in memberlist:
             if memberrole not in x.roles:
                 await x.add_roles(memberrole)
 
