@@ -73,7 +73,7 @@ class Setup(commands.Cog, name="setup"):
             await ctx.send(embed=embed)
             return
         if ctx.invoked_subcommand == None:
-            embed=discord.Embed(title="🔴 Error", description="You didn't provide a valid subcommand.\nAvailable options are: `agree` `joinleave` `modlog` `starboard` `reset`.", color=0xdd2e44, timestamp=datetime.utcnow())
+            embed=discord.Embed(title="🔴 Error", description="You didn't provide a valid subcommand.\nAvailable options are: `agree` `joinleave` `modlog` `starboard` `colorroles` `reset`.", color=0xdd2e44, timestamp=datetime.utcnow())
             await ctx.send(embed=embed)
             return
 
