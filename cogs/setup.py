@@ -626,7 +626,7 @@ class Setup(commands.Cog, name="setup"):
 
             role = None
 
-            if reaction.emoji == '❤️':
+            if reaction.emoji == '💖':
                 role = discord.utils.get(message.guild.roles, name="Red", color=discord.Color.red())
             if reaction.emoji == '💛':
                 role = discord.utils.get(message.guild.roles, name="Yellow", color=discord.Color.gold())
