@@ -10,7 +10,7 @@ class Mod(commands.Cog, name="mod"):
     @commands.command()
     @commands.guild_only()
     async def kick(self, ctx, user: discord.Member = None, *args):
-        """Kicks someone from the server."""
+        """CATEG_MOD Kicks someone from the server."""
         author = ctx.message.author
         channel = ctx.message.channel
         if author.guild_permissions.kick_members == False:
@@ -83,7 +83,7 @@ class Mod(commands.Cog, name="mod"):
     @commands.command()
     @commands.guild_only()
     async def ban(self, ctx, user:discord.Member, *args):
-        """Bans someone from the server."""
+        """CATEG_MOD Bans someone from the server."""
         author = ctx.message.author
         channel = ctx.message.channel
 
@@ -157,7 +157,7 @@ class Mod(commands.Cog, name="mod"):
     @commands.command(aliases=['hban'])
     @commands.guild_only()
     async def hackban(self, ctx, user_id: int):
-        """Can ban someone even if they're not in the server."""
+        """CATEG_MOD Can ban someone even if they're not in the server."""
         author = ctx.message.author
         guild = author.guild
 
@@ -199,7 +199,7 @@ class Mod(commands.Cog, name="mod"):
     @commands.command()
     @commands.guild_only()
     async def embed(self, ctx, *args):
-        """Sends your message in an embed."""
+        """CATEG_MOD Sends your message in an embed."""
         author = ctx.message.author
 
         if author.guild_permissions.manage_messages == False:
@@ -219,7 +219,7 @@ class Mod(commands.Cog, name="mod"):
     @commands.command(aliases=['nuke'])
     @commands.guild_only()
     async def clear(self, ctx, amnt=10):
-        """Deletes a set amount of messages"""
+        """CATEG_MOD Deletes a set amount of messages"""
         author = ctx.message.author
         if author.guild_permissions.manage_messages == False:
             embed=discord.Embed(title="🔴 Error", description="You do not have the necessary permissions.", color=0xdd2e44, timestamp=datetime.utcnow())

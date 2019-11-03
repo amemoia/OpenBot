@@ -15,7 +15,7 @@ class Strike(commands.Cog, name="strike"):
     @commands.command()
     @commands.guild_only()
     async def strike(self, ctx, user: discord.Member = None, *args):
-        """Append a note to a server member, which may be viewed by anyone at any time. Good for noting down bad behaviors and using strikes as a warning."""
+        """CATEG_MOD Append a note to a server member, which may be viewed by anyone at any time. Good for noting down bad behaviors and using strikes as a warning."""
         if ctx.message.author.guild_permissions.manage_messages == False:
             embed=discord.Embed(title="🔴 Error", description="You do not have the necessary permissions.", color=0xdd2e44, timestamp=datetime.utcnow())
             embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
@@ -110,7 +110,7 @@ class Strike(commands.Cog, name="strike"):
     @commands.command()
     @commands.guild_only()
     async def strikes(self, ctx, user: discord.Member = None):
-        """List someone's strikes."""
+        """CATEG_MOD List someone's strikes."""
         if user == None:
             user = ctx.message.author
         guild = ctx.message.guild
@@ -131,7 +131,7 @@ class Strike(commands.Cog, name="strike"):
     @commands.command()
     @commands.guild_only()
     async def rmstrike(self, ctx, strikeID: int=0):
-        """Delete a strike."""
+        """CATEG_MOD Delete a strike."""
         if ctx.message.author.guild_permissions.manage_messages == False:
             embed=discord.Embed(title="🔴 Error", description="You do not have the necessary permissions.", color=0xdd2e44, timestamp=datetime.utcnow())
             embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
@@ -183,7 +183,7 @@ class Strike(commands.Cog, name="strike"):
     @commands.command()
     @commands.guild_only()
     async def clearstrikes(self, ctx, user: discord.Member = None):
-        """Clear someone's strikes."""
+        """CATEG_MOD Clear someone's strikes."""
 
         channel = ctx.message.channel
         author = ctx.message.author

@@ -15,7 +15,7 @@ class Merit(commands.Cog, name="merit"):
     @commands.command()
     @commands.guild_only()
     async def merit(self, ctx, user: discord.Member = None, *args):
-        """Append a note to a server member, which may be viewed by anyone at any time. Good for noting down bad behaviors and using merits as a warning."""
+        """CATEG_MOD Append a note to a server member, which may be viewed by anyone at any time. Good for noting down good behaviors."""
         if ctx.message.author.guild_permissions.manage_messages == False:
             embed=discord.Embed(title="🔴 Error", description="You do not have the necessary permissions.", color=0xdd2e44, timestamp=datetime.utcnow())
             embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
@@ -110,7 +110,7 @@ class Merit(commands.Cog, name="merit"):
     @commands.command()
     @commands.guild_only()
     async def merits(self, ctx, user: discord.Member = None):
-        """List someone's merits."""
+        """CATEG_MOD List someone's merits."""
         if user == None:
             user = ctx.message.author
         guild = ctx.message.guild
@@ -131,7 +131,7 @@ class Merit(commands.Cog, name="merit"):
     @commands.command()
     @commands.guild_only()
     async def rmmerit(self, ctx, meritID: int=0):
-        """Delete a merit."""
+        """CATEG_MOD Delete a merit."""
         if ctx.message.author.guild_permissions.manage_messages == False:
             embed=discord.Embed(title="🔴 Error", description="You do not have the necessary permissions.", color=0xdd2e44, timestamp=datetime.utcnow())
             embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
@@ -183,7 +183,7 @@ class Merit(commands.Cog, name="merit"):
     @commands.command()
     @commands.guild_only()
     async def clearmerits(self, ctx, user: discord.Member = None):
-        """Clear someone's merits."""
+        """CATEG_MOD Clear someone's merits."""
 
         channel = ctx.message.channel
         author = ctx.message.author

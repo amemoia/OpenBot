@@ -14,28 +14,28 @@ class Admin(commands.Cog, name="admin"):
 
     @commands.command()
     async def test(self, ctx):
-        """Responds with an embed."""
+        """CATEG_OWN Responds with an embed."""
         embed=discord.Embed(title="🔵 Test", description="Hello! :wave:", color=0x55acee, timestamp=datetime.utcnow())
         embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
         await ctx.send(embed=embed)
 
     @commands.command()
     async def testerror(self, ctx):
-        """Responds with a error embed."""
+        """CATEG_OWN Responds with a error embed."""
         embed=discord.Embed(title="🔴 Error", description="This is an error.", color=0xdd2e44, timestamp=datetime.utcnow())
         embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
         await ctx.send(embed=embed)
 
     @commands.command()
     async def testwarning(self, ctx):
-        """Responds with a warning embed."""
+        """CATEG_OWN Responds with a warning embed."""
         embed=discord.Embed(title=":warning: Warning", description="This is a warning.", color=0xffcd4c, timestamp=datetime.utcnow())
         embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
         await ctx.send(embed=embed)
 
     @commands.command()
     async def ping(self, ctx):
-        """Sends the bot's latency."""
+        """CATEG_GEN Sends the bot's latency."""
         channel = ctx.message.channel
         t1 = time.perf_counter()
         await channel.trigger_typing()
@@ -47,7 +47,7 @@ class Admin(commands.Cog, name="admin"):
 
     @commands.command()
     async def say(self, ctx, *args):
-        """Repeats after you."""
+        """CATEG_GEN Repeats after you."""
         msg = " ".join(args)
         await ctx.send(msg)
         await ctx.message.delete()
@@ -55,8 +55,8 @@ class Admin(commands.Cog, name="admin"):
     @commands.command()
     @commands.guild_only()
     async def prefix(self, ctx, *, prefix):
-        """Changes the prefix for this server."""
-        if self.client.is_owner(ctx.message.author) == True or ctx.message.author.guild_permissions.manage_guild == True:
+        """CATEG_ADM Changes the prefix for this server."""
+        if await self.client.is_owner(ctx.message.author) == True or ctx.message.author.guild_permissions.manage_guild == True:
             predata = "data/write/prefix.json"
             db = fileIO(predata, "load")
             channel = ctx.message.channel
@@ -74,11 +74,11 @@ class Admin(commands.Cog, name="admin"):
                 db[str(ctx.guild.id)] = prefix
                 fileIO(predata, "save", db)
  
-                embed=discord.Embed(title="⁉️ Prefix", description="Successfully set this server's prefix to `{}`".format(prefix), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+                embed=discord.Embed(title=":interrobang: Prefix", description="Successfully set this server's prefix to `{}`".format(prefix), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
                 embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
                 await ctx.send(embed=embed)
             else:
-                embed=discord.Embed(title="⁉️ Prefix", description="Cancelling...", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+                embed=discord.Embed(title=":interrobang: Prefix", description="Cancelling...", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
                 embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
                 await ctx.send(embed=embed)
         else:
@@ -86,7 +86,7 @@ class Admin(commands.Cog, name="admin"):
 
     @commands.command()
     async def invite(self, ctx):
-        """Sends the bot's invite link."""
+        """CATEG_GEN Sends the bot's invite link."""
         url = discord.utils.oauth_url(client_id=self.client.user.id, permissions=discord.Permissions(permissions=1609952503))
         embed = discord.Embed(title="📨 Invite Link", description="You can invite me using [this link]({})".format(url), color=0x7289da, timestamp=datetime.utcnow())
         embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
@@ -99,7 +99,7 @@ class Admin(commands.Cog, name="admin"):
     @commands.command()
     @commands.is_owner()
     async def status(self, ctx, *args):
-        """Changes the bot's status."""
+        """CATEG_OWN Changes the bot's status."""
         game = " ".join(args)
         if str(game) == "":
             return
@@ -111,7 +111,7 @@ class Admin(commands.Cog, name="admin"):
     @commands.command()
     @commands.is_owner()
     async def guildlist(self, ctx):
-        """Sends a list of guilds the bot is in alongside their IDs."""
+        """CATEG_OWN Sends a list of guilds the bot is in alongside their IDs."""
         msg = discord.Embed(title="📃 Guild list", description="Currently in {} guilds, those are:".format(len(self.client.guilds)), color=client_role_color(self, ctx))
         for x in self.client.guilds:
             msg.add_field(name=x.name, value="ID: `" + str(x.id) + "`, " + str(len(x.members)) + " Members", inline=False)
@@ -123,7 +123,7 @@ class Admin(commands.Cog, name="admin"):
     @commands.command()
     @commands.is_owner()
     async def leaveguild(self, ctx, id: int = 0000000):
-        """Leaves a guild with the provided ID."""
+        """CATEG_OWN Leaves a guild with the provided ID."""
         if id == 0000000:
             embed=discord.Embed(title="🔴 Error", description="You need to provide a valid guild ID.", color=0xdd2e44, timestamp=datetime.utcnow())
             embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
@@ -148,7 +148,7 @@ class Admin(commands.Cog, name="admin"):
     @commands.command(name='eval')
     @commands.is_owner()
     async def _eval(self, ctx, *, command):
-        """Evaluates some code."""
+        """CATEG_OWN Evaluates some code."""
         if await self.client.is_owner(ctx.message.author) == True:
             try:
                 command = command.strip("`")
@@ -180,9 +180,9 @@ class Admin(commands.Cog, name="admin"):
             embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
             await ctx.send(embed=embed)
 
-    @commands.Cog.listener()
-    async def on_command_error(self, ctx, error):
-        await errorcheck(self, ctx, error)
+#    @commands.Cog.listener()
+#    async def on_command_error(self, ctx, error):
+#        await errorcheck(self, ctx, error)
 
 def setup(client):
     tools.jsoncheck()

@@ -6,13 +6,30 @@ from cogs.tools import client_role_color, get_prefix
 from utils.dataIO import fileIO
 from datetime import datetime
 
+#
+#    =help takes a command's doc / help text (the """text""" at the start of each command)
+#    in order to determine their description and category.
+#    the category is determined by the FIRST 10 CHARACTERS of the help text (includes a whitespace)
+#    the rest is used for the description.
+#    
+#    valid categories are: CATEG_GEN, CATEG_FUN, CATEG_MOD, CATEG_ADM, CATEG_OWN
+#                          (general, fun, guild moderator, guild admin, bot owner)
+#    CATEG_OWN commands do not show in -help, they can be found on the website or in the readme
+#    
+#    example:
+#
+#    """CATEG_GEN This is a cool command for cool people"""
+#      |CATEGORY|              DESCRIPTION              |
+#
+
+
 class Help(commands.Cog, name="help"):
     def __init__(self, client):
         self.client = client
 
     @commands.group()
     async def help(self, ctx, cmd: str = "None"):
-        """Sends this message."""
+        """CATEG_GEN Sends this message."""
         self.pre = get_prefix(self, ctx)
 
         all_aliases = []
@@ -28,10 +45,31 @@ class Help(commands.Cog, name="help"):
                     mcommand = discord.utils.get(self.client.commands, aliases=x)
 
         if mcommand == None:
-            general = "`invite` `ping` `profile` `guild` `calc` `assign` `avatar` `guildicon` `get_user` `get_guild`"
-            fun = "`say` `kill` `insult` `hug` `8ball` `roll` `choose` `coinflip` `rapname` `gay` `penis` `payrespects`"
-            mod = "`kick` `ban` `hackban` `strike` `strikes` `rmstrike` `clear`"
-            admin = "`prefix` `setup`"
+
+            general_list = []
+            fun_list = []
+            mod_list = []
+            admin_list = []
+
+            for x in self.client.commands:
+                desc = x.help if x.help is not None else "No description provided."
+                desc_categ = desc[0:9]
+                name = "`" + x.name + "`"
+                if desc_categ == "CATEG_GEN":
+                    general_list.append(name)
+                if desc_categ == "CATEG_FUN":
+                    fun_list.append(name)
+                if desc_categ == "CATEG_MOD":
+                    mod_list.append(name)
+                if desc_categ == "CATEG_ADM":
+                    admin_list.append(name)
+                if desc_categ == "CATEG_OWN" or desc_categ == "CATEG_NON" or desc_categ == "CATEG_SUB":
+                    pass
+
+            general = " ".join(general_list)
+            fun = " ".join(fun_list)
+            mod = " ".join(mod_list)
+            admin = " ".join(admin_list)
 
             embed = discord.Embed(title="📕 Help", description="My prefix on this server is `{pre}`. Alternatively, just @ me. \nFor more information on a command, send `{pre}help [command]`".format(pre=self.pre), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
             embed.add_field(name="🔷 General", value=general, inline=False)
@@ -72,9 +110,10 @@ class Help(commands.Cog, name="help"):
                 usage = "{}{}".format(self.pre, mcommand.name)
             ####                                                                                                            ####
 
+
             info = {
                 "cmd_name" : "{}{}".format(self.pre, mcommand.name),
-                "cmd_desc" : mcommand.help if mcommand.help is not None else "No description provided.",
+                "cmd_desc" : "",
                 "cmd_alias" : aliases,
                 "cmd_format" : "`{}`".format(usage)
             }
@@ -82,9 +121,9 @@ class Help(commands.Cog, name="help"):
 
     @commands.command(aliases = ['info', 'about'])
     async def botinfo(self, ctx):
-        """Information about the bot."""
+        """CATEG_GEN Information about the bot."""
         embed = discord.Embed(title="🤖 About", description="Based on [OpenBot](https://github.com/notLeM/OpenBot), an open-source discord bot by [notLeM](https://github.com/notLeM).", timestamp=datetime.utcnow(), color=client_role_color(self, ctx))
-        embed.add_field(name="OpenBot version", value="Alpha 5.0")
+        embed.add_field(name="OpenBot version", value="Alpha 5.1")
         embed.add_field(name="Servers", value=len(self.client.guilds))
         embed.add_field(name="Commands", value=len(self.client.commands))
         embed.add_field(name="\u200b", value="[Invite]({}) • [OpenBot Website](https://notlem.github.io/)".format(discord.utils.oauth_url(client_id=self.client.user.id, permissions=discord.Permissions(permissions=1609952503))), inline=False)

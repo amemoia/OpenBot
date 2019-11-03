@@ -12,7 +12,7 @@ class General(commands.Cog, name='general'):
 
     @commands.command(aliases=['profile'])
     async def userinfo(self, ctx, *, user: discord.Member = None):
-        """Sends some information about a given user."""
+        """CATEG_GEN Sends some information about a given user."""
         author = ctx.message.author
         guild = ctx.message.guild
 
@@ -128,9 +128,9 @@ class General(commands.Cog, name='general'):
             await ctx.send("I need the `Embed links` permission "
                                "to send this")
 
-    @commands.command(aliases=['hinfo', 'get_user'])
-    async def hackinfo(self, ctx, uid: int=0):
-        """Finds info about a user based on their ID. Works on people that aren't in the current guild, but sends less info. The bot needs to share a guild with that user."""
+    @commands.command(aliases=['hinfo', 'hackinfo'])
+    async def get_user(self, ctx, uid: int=0):
+        """CATEG_GEN Finds info about a user based on their ID. Works on people that aren't in the current guild, but sends less info. The bot needs to share a guild with that user."""
         if uid == 0 or len(str(uid)) != 18:
             embed=discord.Embed(title="🔴 Error", description="Invalid ID.", color=0xdd2e44, timestamp=datetime.utcnow())
             embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
@@ -186,7 +186,7 @@ class General(commands.Cog, name='general'):
     @commands.command(aliases=['server', 'guild', 'guildinfo'])
     @commands.guild_only()
     async def serverinfo(self, ctx):
-        """Returns information on the current server."""
+        """CATEG_GEN Returns information on the current server."""
         guild = ctx.message.guild
         text_channels = len([x for x in guild.text_channels])
         voice_channels = len([x for x in guild.voice_channels])
@@ -272,9 +272,9 @@ class General(commands.Cog, name='general'):
         except discord.HTTPException:
             await ctx.send("I need the `Embed links` permission to do this.")
 
-    @commands.command(aliases=['hguild', 'get_guild'])
-    async def hackguild(self, ctx, uid: int = 0):
-        """Returns information on a guild with the given ID. The bot has to be a member of the guild."""
+    @commands.command(aliases=['hguild', 'hackguild'])
+    async def get_guild(self, ctx, uid: int = 0):
+        """CATEG_GEN Returns information on a guild with the given ID. The bot has to be a member of the guild."""
         if uid == 0 or len(str(uid)) != 18:
             embed=discord.Embed(title="🔴 Error", description="Invalid ID.", color=0xdd2e44, timestamp=datetime.utcnow())
             embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
@@ -373,7 +373,7 @@ class General(commands.Cog, name='general'):
 
     @commands.command()
     async def calc(self, ctx, *, maths):
-        """Does the math for you"""
+        """CATEG_GEN Does the math for you"""
         equation = maths.strip().replace('^', '**').replace('x', '*')
         try:
             if '=' in equation:
@@ -395,7 +395,7 @@ class General(commands.Cog, name='general'):
     @commands.command(aliases=['assign'], pass_context=True)
     @commands.guild_only()
     async def role(self, ctx, *, role: discord.Role = None):
-        """Assigns you a role that is below your highest one."""
+        """CATEG_GEN Assigns you a role that is below your highest one."""
         user = ctx.message.author
         if role is None:
             embed=discord.Embed(title="🔴 Error", description="You haven't specified a role!", color=0xdd2e44, timestamp=datetime.utcnow())
@@ -423,7 +423,7 @@ class General(commands.Cog, name='general'):
 
     @commands.command(aliases=['pfp', 'icon'])
     async def avatar(self, ctx, user: discord.User = None):
-        """Returns a user's avatar."""
+        """CATEG_GEN Returns a user's avatar."""
         if not user:
             user = ctx.message.author
         icon = user.avatar_url
@@ -435,7 +435,7 @@ class General(commands.Cog, name='general'):
     @commands.command(aliases=['guildicon'])
     @commands.guild_only()
     async def servericon(self, ctx):
-        """Returns the server's icon."""
+        """CATEG_GEN Returns the server's icon."""
         user = ctx.message.guild
         icon = user.icon_url
         if icon._url == None:
@@ -452,7 +452,7 @@ class General(commands.Cog, name='general'):
     @commands.command()
     @commands.guild_only()
     async def banner(self, ctx):
-        """Returns the server's banner."""
+        """CATEG_GEN Returns the server's banner."""
         user = ctx.message.guild
         icon = user.banner_url
         if icon._url == None:
@@ -469,7 +469,7 @@ class General(commands.Cog, name='general'):
     @commands.command()
     @commands.guild_only()
     async def splash(self, ctx):
-        """Returns the server's invite splash."""
+        """CATEG_GEN Returns the server's invite splash."""
         user = ctx.message.guild
         icon = user.splash_url
         if icon._url == None:

@@ -13,7 +13,7 @@ class Fun(commands.Cog, name="fun"):
 
     @commands.command()
     async def kill(self, ctx, user: discord.Member = None):
-        """Murder someone."""
+        """CATEG_FUN Murder someone."""
         author = ctx.message.author
         if user == None:
             user = ctx.message.author
@@ -46,7 +46,7 @@ class Fun(commands.Cog, name="fun"):
     
     @commands.command()
     async def insult(self, ctx, user: discord.Member = None):
-        """Insult someone."""
+        """CATEG_FUN Insult someone."""
         if user == None:
             user = ctx.message.author
         insults = fileIO("data/read/insults.json", "load")
@@ -64,7 +64,7 @@ class Fun(commands.Cog, name="fun"):
 
     @commands.command(aliases=['cuddle'])
     async def hug(self, ctx, user: discord.Member=None):
-        """Free hugs!"""
+        """CATEG_FUN Free hugs!"""
         author = ctx.message.author
 
         choices = fileIO("data/read/links.json", "load")
@@ -83,7 +83,7 @@ class Fun(commands.Cog, name="fun"):
 
     @commands.command(aliases=['8ball'])
     async def ask8(self, ctx):
-        """Ask the almighty 8ball a question."""
+        """CATEG_FUN Ask the almighty 8ball a question."""
         response=(random.choice(["It is certain :8ball:",
                                 "It is decidedly so :8ball:",
                                 "Without a doubt :8ball:",
@@ -105,7 +105,7 @@ class Fun(commands.Cog, name="fun"):
 
     @commands.command()
     async def roll(self, ctx, number : int = 20):
-        """Roll some dice."""
+        """CATEG_FUN Roll some dice."""
         author = ctx.message.author
         if number > 1:
             n = random.randint(1, number)
@@ -119,7 +119,7 @@ class Fun(commands.Cog, name="fun"):
 
     @commands.command(aliases=['pick'])
     async def choose(self, ctx, *choices: str):
-        """Chooses between given options at random."""
+        """CATEG_FUN Chooses between given options at random."""
         if len(choices) < 2:
             embed=discord.Embed(title="🔴 Error", description='Not enough choices to pick from.', color=0xdd2e44, timestamp=datetime.utcnow())
             embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
@@ -131,14 +131,14 @@ class Fun(commands.Cog, name="fun"):
 
     @commands.command(aliases=['coinflip'])
     async def flip(self, ctx):
-        """Flip a coin."""
+        """CATEG_FUN Flip a coin."""
         embed=discord.Embed(title="📀 Coinflip", description=random.choice(["Heads!", "Tails!"]), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
         embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
         await ctx.send(embed=embed)
 
     @commands.command()
     async def rapname(self, ctx, user: discord.Member=None):
-        """Start off your Soundcloud career with a cool nickname."""
+        """CATEG_FUN Start off your Soundcloud career with a cool nickname."""
         if user == None:
             user = ctx.message.author
 
@@ -154,7 +154,7 @@ class Fun(commands.Cog, name="fun"):
 
     @commands.command()
     async def gay(self, ctx, user: discord.Member=None):
-        """Measures how gay you are."""
+        """CATEG_FUN Measures how gay you are."""
         if not user:
             user = ctx.message.author
 
@@ -179,7 +179,7 @@ class Fun(commands.Cog, name="fun"):
 
     @commands.command(aliases=['dick', 'dong'])
     async def penis(self, ctx, user: discord.Member=None):
-        """Measures your dick size. 100% accurate"""
+        """CATEG_FUN Measures your dick size. 100% accurate"""
         if not user:
             user = ctx.message.author
 
@@ -200,7 +200,7 @@ class Fun(commands.Cog, name="fun"):
 
     @commands.command(aliases=['f'])
     async def payrespects(self, ctx):
-        """Send `=f` to pay respects"""
+        """CATEG_FUN Send `=f` to pay respects"""
         db = fileIO("data/write/payrespects.json", "load")
         db[str(ctx.message.id)] = datetime.today().strftime('%Y-%m-%d') 
         fileIO("data/write/payrespects.json", "save", db)
