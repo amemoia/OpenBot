@@ -15,12 +15,14 @@ class Setup(commands.Cog, name="setup"):
                         "TRUST" : None,
                         "VIP" : None,
                         "AGREE" : {"CHANNEL" : None, "ROLE" : None},
-                        "MODLOG" : {"CHANNEL" : None, "MESSAGES" : True}}
+                        "MODLOG" : {"CHANNEL" : None, "MESSAGES" : True},
+                        "COLORS" : []}
+        self.coloremoji = ['💖', '💛', '💚', '💙', '💜']
 
     @commands.guild_only()
     @commands.command()
     async def settings(self, ctx):
-        """Shows the bot's settings for the current guild."""
+        """CATEG_ADM Shows the bot's settings for the current guild."""
         guild = ctx.message.guild
         guildstr = str(guild.id)
         disabled = []
@@ -64,19 +66,21 @@ class Setup(commands.Cog, name="setup"):
     @commands.guild_only()
     @commands.group()
     async def setup(self, ctx):
-        """Sets up commands that require specific channels or roles. Valid subcommands are: `agree` `mute` `joinleave` `modlog` `starboard` `trust` `vip` `reset`"""
+        """CATEG_ADM Sets up commands that require specific channels or roles. Valid subcommands are: `agree` `joinleave` `modlog` `starboard` `colorroles` `trust` `vip` `reset`"""
         self.pre = get_prefix(self, ctx)
         if ctx.message.author.guild_permissions.manage_guild == False:
             embed=discord.Embed(title="🔴 Error", description="You do not have the required permissions for this command.", color=0xdd2e44, timestamp=datetime.utcnow())
             await ctx.send(embed=embed)
             return
         if ctx.invoked_subcommand == None:
-            embed=discord.Embed(title="🔴 Error", description="You didn't provide a valid subcommand.\nAvailable options are: `agree` `mute` `joinleave` `modlog` `starboard` `reset`.", color=0xdd2e44, timestamp=datetime.utcnow())
+            embed=discord.Embed(title="🔴 Error", description="You didn't provide a valid subcommand.\nAvailable options are: `agree` `joinleave` `modlog` `starboard` `reset`.", color=0xdd2e44, timestamp=datetime.utcnow())
             await ctx.send(embed=embed)
             return
 
     @setup.command()
+    @commands.has_permissions(manage_guild=True)
     async def agree(self, ctx, channel: discord.TextChannel = None):
+        """CATEG_SUB """
         author = ctx.message.author
         rechannel = ctx.message.channel
         guild = ctx.message.guild
@@ -164,6 +168,7 @@ class Setup(commands.Cog, name="setup"):
     @commands.command(name="agree")
     @commands.guild_only()
     async def _agree(self, ctx):
+        """CATEG_NONE"""
         guild = ctx.message.guild
         author = ctx.message.author
         guildstr = str(guild.id)
@@ -177,8 +182,10 @@ class Setup(commands.Cog, name="setup"):
                 await ctx.message.delete()
 
     @setup.command()
+    @commands.has_permissions(manage_guild=True)
     @commands.guild_only()
     async def joinleave(self, ctx, channel: discord.TextChannel = None):
+        """CATEG_SUB """
         guildstr = str(ctx.message.guild.id)
         if channel == None:
             embed=discord.Embed(title=":warning: {}".format(self.client.user.name), description="You didn't give me a channel, would you like me set up here?", color=0xffcd4c, timestamp=datetime.utcnow())
@@ -206,8 +213,10 @@ class Setup(commands.Cog, name="setup"):
         return await ctx.send(embed=embed)
 
     @setup.command()
+    @commands.has_permissions(manage_guild=True)
     @commands.guild_only()
     async def starboard(self, ctx, channel: discord.TextChannel = None):
+        """CATEG_SUB """
         guild = ctx.message.guild
         guildstr = str(guild.id)
 
@@ -248,13 +257,17 @@ class Setup(commands.Cog, name="setup"):
 #
 
     @setup.group()
+    @commands.has_permissions(manage_guild=True)
     async def modlog(self, ctx):
+        """CATEG_SUB """
         if ctx.invoked_subcommand == None:
             embed=discord.Embed(title="🔴 Error", description="You didn't provide a valid subcommand.\nAvailable options are: `channel` `messages` `disable`.", color=0xdd2e44)
             return await ctx.send(embed=embed)
 
     @modlog.command()
+    @commands.has_permissions(manage_guild=True)
     async def disable(self, ctx):
+        """CATEG_SUB """
         guild = ctx.message.guild
         
         if not str(guild.id) in self.db:
@@ -269,7 +282,9 @@ class Setup(commands.Cog, name="setup"):
             await ctx.send(embed=embed)
 
     @modlog.command()
+    @commands.has_permissions(manage_guild=True)
     async def channel(self, ctx, channel: discord.TextChannel = None):
+        """CATEG_SUB """
         guild = ctx.message.guild
         channel = ctx.message.channel
         author = ctx.message.author
@@ -328,58 +343,305 @@ class Setup(commands.Cog, name="setup"):
                         await ctx.send(embed=embed)
 
     @modlog.command()
+    @commands.has_permissions(manage_guild=True)
     async def messages(self, ctx):
+        """CATEG_SUB """
         msg = "deleted and edited message logging"
         await modlog_toggle_messages(self, ctx, msg)
 
+    @setup.command()
+    @commands.has_permissions(manage_guild=True)
+    async def trust(self, ctx, role: discord.Role = None):
+        """CATEG_SUB """
+        guild = ctx.guild
+        guildstr = str(guild.id)
+        if role == None:
+            embed = discord.Embed(title="⚙️ Setup", description="You didn't give me a role! Please try again.", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
+            return await ctx.send(embed=embed)
+        if role not in ctx.guild.roles:
+            embed = discord.Embed(title="⚙️ Setup", description="I couldn't find that role.", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
+            return await ctx.send(embed=embed)
+
+        if guildstr not in self.db:
+            self.db[guildstr] = self.template
+        self.db[guildstr]["TRUST"] = str(role.id)
+
+        fileIO(self.path, "save", self.db)
+        embed = discord.Embed(title="⚙️ Setup", description="Set `{}trust` role.".format(get_prefix(self, ctx)), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+        embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
+        return await ctx.send(embed=embed)
+
+    @commands.command(name="trust", aliases=['verify'])
+    @commands.guild_only()
+    async def _trust(self, ctx, user: discord.Member = None):
+        """CATEG_MOD """
+        guildstr = str(ctx.guild.id)
+        if user == None:
+            embed = discord.Embed(title=":white_check_mark: Trust", description="You need to provide a user.", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
+            return await ctx.send(embed=embed)
+        if user == ctx.message.author:
+            embed = discord.Embed(title=":white_check_mark: Trust", description="You can't do that to yourself!", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
+            return await ctx.send(embed=embed)
+        if guildstr not in self.db:
+            embed = discord.Embed(title=":white_check_mark: Trust", description="This server didn't setup `trust`.", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
+            return await ctx.send(embed=embed)
+        if self.db[guildstr]["TRUST"] == None:
+            embed = discord.Embed(title=":white_check_mark: Trust", description="This server didn't setup `trust`.", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
+            return await ctx.send(embed=embed)
+
+        role = discord.utils.get(ctx.guild.roles, id=int(self.db[guildstr]["TRUST"]))
+        if role == None:
+            embed = discord.Embed(title=":white_check_mark: Trust", description="There was a problem finding the trust role, if you're an admin please run `setup trust`.", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
+            return await ctx.send(embed=embed)
+        
+        await user.add_roles(role)
+        embed = discord.Embed(title=":white_check_mark: Trust", description="{} is now verified!".format(user.mention), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+        embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
+        return await ctx.send(embed=embed)
+
+    @setup.command()
+    @commands.has_permissions(manage_guild=True)
+    async def vip(self, ctx, role: discord.Role = None):
+        """CATEG_SUB """
+        guild = ctx.guild
+        guildstr = str(guild.id)
+        if role == None:
+            embed = discord.Embed(title="⚙️ Setup", description="You didn't give me a role! Please try again.", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
+            return await ctx.send(embed=embed)
+        if role not in ctx.guild.roles:
+            embed = discord.Embed(title="⚙️ Setup", description="I couldn't find that role.", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
+            return await ctx.send(embed=embed)
+
+        if guildstr not in self.db:
+            self.db[guildstr] = self.template
+        self.db[guildstr]["VIP"] = str(role.id)
+
+        fileIO(self.path, "save", self.db)
+        embed = discord.Embed(title="⚙️ Setup", description="Set `{}vip` role.".format(get_prefix(self, ctx)), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+        embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
+        return await ctx.send(embed=embed)
+
+    @commands.command(name="vip")
+    @commands.guild_only()
+    async def _vip(self, ctx, user: discord.Member = None):
+        """CATEG_MOD """
+        guildstr = str(ctx.guild.id)
+        if user == None:
+            embed = discord.Embed(title=":white_check_mark: Trust", description="You need to provide a user.", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
+            return await ctx.send(embed=embed)
+        if user == ctx.message.author:
+            embed = discord.Embed(title=":white_check_mark: Trust", description="You can't do that to yourself!", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
+            return await ctx.send(embed=embed)
+        if guildstr not in self.db:
+            embed = discord.Embed(title=":white_check_mark: Trust", description="This server didn't setup `vip`.", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
+            return await ctx.send(embed=embed)
+        if self.db[guildstr]["TRUST"] == None:
+            embed = discord.Embed(title=":white_check_mark: Trust", description="This server didn't setup `vip`.", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
+            return await ctx.send(embed=embed)
+
+        role = discord.utils.get(ctx.guild.roles, id=int(self.db[guildstr]["VIP"]))
+        if role == None:
+            embed = discord.Embed(title=":white_check_mark: Trust", description="There was a problem finding the VIP role, if you're an admin please run `setup trust`.", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
+            return await ctx.send(embed=embed)
+        
+        await user.add_roles(role)
+        embed = discord.Embed(title=":white_check_mark: Trust", description="{} is now a VIP!".format(user.mention), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+        embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
+        return await ctx.send(embed=embed)
+
+    @setup.command()
+    async def colorroles(self, ctx):
+        """CATEG_SUB """
+        # :heart::yellow_heart::green_heart::blue_heart::purple_heart:
+        red = discord.utils.get(ctx.guild.roles, name="Red", color=discord.Color.red())
+        yellow = discord.utils.get(ctx.guild.roles, name="Yellow", color=discord.Color.gold())
+        green = discord.utils.get(ctx.guild.roles, name="Green", color=discord.Color.green())
+        blue = discord.utils.get(ctx.guild.roles, name="Blue", color=discord.Color.blue())
+        purple = discord.utils.get(ctx.guild.roles, name="Purple", color=discord.Color.purple())
+
+        if red == None:
+            await ctx.guild.create_role(name="Red", color=discord.Color.red())
+        if yellow == None:
+            await ctx.guild.create_role(name="Yellow", color=discord.Color.gold())
+        if green == None:
+            await ctx.guild.create_role(name="Green", color=discord.Color.green())
+        if blue == None:
+            await ctx.guild.create_role(name="Blue", color=discord.Color.blue())
+        if purple == None:
+            await ctx.guild.create_role(name="Purple", color=discord.Color.purple())
+
+        await ctx.send("Color roles created! Send `{}colorroles` in a channel to let members change their display color by reacting to a message. Also please remember to set up the role hierarchy in a way that makes the colors show up.".format(get_prefix(self, ctx)))
+
+    @commands.command(name="colorroles")
+    @commands.has_permissions(manage_messages=True)
+    async def _colorroles(self, ctx):
+        """CATEG_MOD allows members who react to the sent message to get a chosen color-role"""
+        guildstr = str(ctx.guild.id)
+        red = discord.utils.get(ctx.guild.roles, name="Red", color=discord.Color.red())
+        yellow = discord.utils.get(ctx.guild.roles, name="Yellow", color=discord.Color.gold())
+        green = discord.utils.get(ctx.guild.roles, name="Green", color=discord.Color.green())
+        blue = discord.utils.get(ctx.guild.roles, name="Blue", color=discord.Color.blue())
+        purple = discord.utils.get(ctx.guild.roles, name="Purple", color=discord.Color.purple())
+
+        roles = []
+        roles.append(red)
+        roles.append(green)
+        roles.append(yellow)
+        roles.append(blue)
+        roles.append(purple)
+        for x in roles:
+            if x == None:
+                await ctx.send("This server hasn't set up color roles.")
+                break
+        
+        embed = discord.Embed(title="Color roles (non-staff)", description="Add one of the following colored role to your current default role without affecting permissions.", color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+        msg = await ctx.send(embed=embed)
+
+        for x in self.coloremoji:
+            await msg.add_reaction(x)
+
+        await ctx.message.delete()
+
+        if guildstr not in self.db:
+            self.db[guildstr] = self.template
+        self.db[guildstr]["COLORS"].append(str(msg.id))
+        fileIO(self.path, "save", self.db)
+
+
+        
+
+
+
+
+
+#################################################################################
+#################################### EVENTS #####################################
 #################################################################################
 
-#   starboard
+
+
+
+
+
+
+
+#   starboard and colors
     @commands.Cog.listener()
     @commands.guild_only()
     async def on_reaction_add(self, reaction, user):
         message = reaction.message
         guild = message.guild
+        guildstr = str(guild.id)
         if not str(guild.id) in self.db:
             return
-        if self.db[str(guild.id)]["STARBOARD"] == None:
-            return
-        if reaction.me:
-            return
-        if reaction.emoji != "⭐":
-            return
-        if reaction.count < 3:
-            return
-        
-        channelid = self.db[str(guild.id)]["STARBOARD"]
-        channel = guild.get_channel(int(channelid))
 
-        try:
-            msgcheck = await channel.fetch_message(message.id)
-            if msgcheck != None:
+        if reaction.emoji == "⭐":
+            if self.db[str(guild.id)]["STARBOARD"] == None:
                 return
-            if msgcheck == None:
+            if reaction.me:
+                return
+            if reaction.count < 3:
+                return
+            
+            channelid = self.db[str(guild.id)]["STARBOARD"]
+            channel = guild.get_channel(int(channelid))
+
+            try:
+                msgcheck = await channel.fetch_message(message.id)
+                if msgcheck != None:
+                    return
+                if msgcheck == None:
+                    pass
+            except discord.NotFound:
                 pass
-        except discord.NotFound:
+
+            embed = discord.Embed(title="New star! :star:", color=0xffcd4c, timestamp=datetime.utcnow())
+            embed.add_field(name="Author", value=str(message.author))
+            embed.add_field(name="Channel", value=message.channel.mention)
+            embed.add_field(name="Message", value="[Jump]({})".format(message.jump_url))
+            embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
+
+            if message.content != '' and message.content != None:
+                content = message.content
+                embed.add_field(name="Content", value=content, inline=False)
+
+            if len(message.attachments) == 1:
+                for x in message.attachments:
+                    if x.filename.endswith(".png") or x.filename.endswith(".gif") or x.filename.endswith(".jpg") or x.filename.endswith(".jpeg"):
+                        embed.set_image(url=x.url)
+
+            await channel.send(embed=embed)
             pass
 
-        embed = discord.Embed(title="New star! :star:", color=0xffcd4c, timestamp=datetime.utcnow())
-        embed.add_field(name="Author", value=str(message.author))
-        embed.add_field(name="Channel", value=message.channel.mention)
-        embed.add_field(name="Message", value="[Jump]({})".format(message.jump_url))
-        embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
+        elif reaction.emoji in self.coloremoji: #['❤️', '💛', '💚', '💙', '💜']
 
-        if message.content != '' and message.content != None:
-            content = message.content
-            embed.add_field(name="Content", value=content, inline=False)
+            if str(reaction.message.id) not in self.db[guildstr]["COLORS"]:
+                return
 
-        if len(message.attachments) == 1:
-            for x in message.attachments:
-                if x.filename.endswith(".png") or x.filename.endswith(".gif") or x.filename.endswith(".jpg") or x.filename.endswith(".jpeg"):
-                    embed.set_image(url=x.url)
+            role = None
 
-        await channel.send(embed=embed)
-        pass
+            if reaction.emoji == '💖':
+                role = discord.utils.get(message.guild.roles, name="Red", color=discord.Color.red())
+            if reaction.emoji == '💛':
+                role = discord.utils.get(message.guild.roles, name="Yellow", color=discord.Color.gold())
+            if reaction.emoji == '💚':
+                role = discord.utils.get(message.guild.roles, name="Green", color=discord.Color.green())
+            if reaction.emoji == '💙':
+                role = discord.utils.get(message.guild.roles, name="Blue", color=discord.Color.blue())
+            if reaction.emoji == '💜':
+                role = discord.utils.get(message.guild.roles, name="Purple", color=discord.Color.purple())
+    
+            if role != None:
+                if role not in user.roles:
+                    await user.add_roles(role)
+
+            pass
+
+    @commands.Cog.listener()
+    @commands.guild_only()
+    async def on_reaction_remove(self, reaction, user):
+        message = reaction.message
+        guild = message.guild
+        guildstr = str(guild.id)
+        if not str(guild.id) in self.db:
+            return
+        if reaction.emoji in self.coloremoji: #['❤️', '💛', '💚', '💙', '💜']
+
+            if str(reaction.message.id) not in self.db[guildstr]["COLORS"]:
+                return
+
+            role = None
+
+            if reaction.emoji == '❤️':
+                role = discord.utils.get(message.guild.roles, name="Red", color=discord.Color.red())
+            if reaction.emoji == '💛':
+                role = discord.utils.get(message.guild.roles, name="Yellow", color=discord.Color.gold())
+            if reaction.emoji == '💚':
+                role = discord.utils.get(message.guild.roles, name="Green", color=discord.Color.green())
+            if reaction.emoji == '💙':
+                role = discord.utils.get(message.guild.roles, name="Blue", color=discord.Color.blue())
+            if reaction.emoji == '💜':
+                role = discord.utils.get(message.guild.roles, name="Purple", color=discord.Color.purple())
+    
+            if role != None:
+                if role in user.roles:
+                    await user.remove_roles(role)
+
+            pass
 
 #    message delete
     @commands.Cog.listener()
@@ -429,6 +691,8 @@ class Setup(commands.Cog, name="setup"):
         try:
             if str(guild.id) not in self.db:
                 return
+            if self.db[str(guild.id)]["MODLOG"]["CHANNEL"] == None:
+                return
         except AttributeError:
             return
         if self.db[str(guild.id)]["MODLOG"]["MESSAGES"] == False:
@@ -468,6 +732,8 @@ class Setup(commands.Cog, name="setup"):
 
         if str(guild.id) not in self.db:
             return
+        if self.db[str(guild.id)]["MODLOG"]["CHANNEL"] == None:
+            return
 
         if self.db[guildstr]["JOINLEAVE"] != None:
             strwelcome = self.db[str(guild.id)]["JOINLEAVE"]
@@ -495,6 +761,8 @@ class Setup(commands.Cog, name="setup"):
         name = str(member)
 
         if str(guild.id) not in self.db:
+            return
+        if self.db[str(guild.id)]["MODLOG"]["CHANNEL"] == None:
             return
             
         if self.db[guildstr]["JOINLEAVE"] != None:
@@ -557,6 +825,8 @@ class Setup(commands.Cog, name="setup"):
         guild = before
         
         if str(guild.id) not in self.db:
+            return
+        if self.db[str(guild.id)]["MODLOG"]["CHANNEL"] == None:
             return
 
         channelid = self.db[str(guild.id)]["MODLOG"]["CHANNEL"]
@@ -776,6 +1046,8 @@ class Setup(commands.Cog, name="setup"):
         
         if str(guild.id) not in self.db:
             return
+        if self.db[str(guild.id)]["MODLOG"]["CHANNEL"] == None:
+            return
 
         channelid = self.db[str(guild.id)]["MODLOG"]["CHANNEL"]
         channel = guild.get_channel(int(channelid))
@@ -793,6 +1065,8 @@ class Setup(commands.Cog, name="setup"):
         guild = role.guild
         
         if str(guild.id) not in self.db:
+            return
+        if self.db[str(guild.id)]["MODLOG"]["CHANNEL"] == None:
             return
 
         channelid = self.db[str(guild.id)]["MODLOG"]["CHANNEL"]
@@ -812,6 +1086,8 @@ class Setup(commands.Cog, name="setup"):
         guild = before.guild
         
         if str(guild.id) not in self.db:
+            return
+        if self.db[str(guild.id)]["MODLOG"]["CHANNEL"] == None:
             return
         channelid = self.db[str(guild.id)]["MODLOG"]["CHANNEL"]
         channel = guild.get_channel(int(channelid))
@@ -864,6 +1140,8 @@ class Setup(commands.Cog, name="setup"):
         
         if str(guild.id) not in self.db:
             return
+        if self.db[str(guild.id)]["MODLOG"]["CHANNEL"] == None:
+            return
         channelid = self.db[str(guild.id)]["MODLOG"]["CHANNEL"]
         send = guild.get_channel(int(channelid))
         
@@ -895,6 +1173,8 @@ class Setup(commands.Cog, name="setup"):
         
         if str(guild.id) not in self.db:
             return
+        if self.db[str(guild.id)]["MODLOG"]["CHANNEL"] == None:
+            return
         channelid = self.db[str(guild.id)]["MODLOG"]["CHANNEL"]
         send = guild.get_channel(int(channelid))
         
@@ -924,6 +1204,8 @@ class Setup(commands.Cog, name="setup"):
         guild = before.guild
         
         if str(guild.id) not in self.db:
+            return
+        if self.db[str(guild.id)]["MODLOG"]["CHANNEL"] == None:
             return
         channelid = self.db[str(guild.id)]["MODLOG"]["CHANNEL"]
         channel = guild.get_channel(int(channelid))
