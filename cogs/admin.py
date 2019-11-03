@@ -180,9 +180,9 @@ class Admin(commands.Cog, name="admin"):
             embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
             await ctx.send(embed=embed)
 
-#    @commands.Cog.listener()
-#    async def on_command_error(self, ctx, error):
-#        await errorcheck(self, ctx, error)
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx, error):
+        await errorcheck(self, ctx, error)
 
 def setup(client):
     tools.jsoncheck()
