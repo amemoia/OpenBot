@@ -542,14 +542,18 @@ class Setup(commands.Cog, name="setup"):
 #   starboard and colors
     @commands.Cog.listener()
     @commands.guild_only()
-    async def on_reaction_add(self, reaction, user):
-        message = reaction.message
-        guild = message.guild
+    async def on_raw_reaction_add(self, payload):
+        reaction = payload
+        guild = self.client.get_guild(reaction.guild_id)
+        user_notguild = self.client.get_user(reaction.user_id)
+        user = guild.get_member(user_notguild.id)
+        channel = self.client.get_channel(reaction.channel_id)
+        message = await channel.fetch_message(reaction.message_id)
         guildstr = str(guild.id)
         if not str(guild.id) in self.db:
             return
 
-        if reaction.emoji == "⭐":
+        if reaction.emoji.name == "⭐":
             if self.db[str(guild.id)]["STARBOARD"] == None:
                 return
             if reaction.me:
@@ -587,22 +591,22 @@ class Setup(commands.Cog, name="setup"):
             await channel.send(embed=embed)
             pass
 
-        elif reaction.emoji in self.coloremoji: #['❤️', '💛', '💚', '💙', '💜']
+        elif reaction.emoji.name in self.coloremoji: #['❤️', '💛', '💚', '💙', '💜']
 
-            if str(reaction.message.id) not in self.db[guildstr]["COLORS"]:
+            if str(message.id) not in self.db[guildstr]["COLORS"]:
                 return
 
             role = None
 
-            if reaction.emoji == '💖':
+            if reaction.emoji.name == '💖':
                 role = discord.utils.get(message.guild.roles, name="Red", color=discord.Color.red())
-            if reaction.emoji == '💛':
+            if reaction.emoji.name == '💛':
                 role = discord.utils.get(message.guild.roles, name="Yellow", color=discord.Color.gold())
-            if reaction.emoji == '💚':
+            if reaction.emoji.name == '💚':
                 role = discord.utils.get(message.guild.roles, name="Green", color=discord.Color.green())
-            if reaction.emoji == '💙':
+            if reaction.emoji.name == '💙':
                 role = discord.utils.get(message.guild.roles, name="Blue", color=discord.Color.blue())
-            if reaction.emoji == '💜':
+            if reaction.emoji.name == '💜':
                 role = discord.utils.get(message.guild.roles, name="Purple", color=discord.Color.purple())
     
             if role != None:
@@ -613,28 +617,32 @@ class Setup(commands.Cog, name="setup"):
 
     @commands.Cog.listener()
     @commands.guild_only()
-    async def on_reaction_remove(self, reaction, user):
-        message = reaction.message
-        guild = message.guild
+    async def on_raw_reaction_remove(self, payload):
+        reaction = payload
+        guild = self.client.get_guild(reaction.guild_id)
+        user_notguild = self.client.get_user(reaction.user_id)
+        user = guild.get_member(user_notguild.id)
+        channel = self.client.get_channel(reaction.channel_id)
+        message = await channel.fetch_message(reaction.message_id)
         guildstr = str(guild.id)
         if not str(guild.id) in self.db:
             return
-        if reaction.emoji in self.coloremoji: #['❤️', '💛', '💚', '💙', '💜']
+        if reaction.emoji.name in self.coloremoji: #['❤️', '💛', '💚', '💙', '💜']
 
-            if str(reaction.message.id) not in self.db[guildstr]["COLORS"]:
+            if str(message.id) not in self.db[guildstr]["COLORS"]:
                 return
 
             role = None
 
-            if reaction.emoji == '💖':
+            if reaction.emoji.name == '💖':
                 role = discord.utils.get(message.guild.roles, name="Red", color=discord.Color.red())
-            if reaction.emoji == '💛':
+            if reaction.emoji.name == '💛':
                 role = discord.utils.get(message.guild.roles, name="Yellow", color=discord.Color.gold())
-            if reaction.emoji == '💚':
+            if reaction.emoji.name == '💚':
                 role = discord.utils.get(message.guild.roles, name="Green", color=discord.Color.green())
-            if reaction.emoji == '💙':
+            if reaction.emoji.name == '💙':
                 role = discord.utils.get(message.guild.roles, name="Blue", color=discord.Color.blue())
-            if reaction.emoji == '💜':
+            if reaction.emoji.name == '💜':
                 role = discord.utils.get(message.guild.roles, name="Purple", color=discord.Color.purple())
     
             if role != None:
