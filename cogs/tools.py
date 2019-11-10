@@ -96,47 +96,47 @@ async def modlog_toggle_messages(self, ctx, msg):
 
 async def log_strike(self, ctx, user, strike_data, strikeID):
     guild = ctx.guild
-    striker = strike_data["Author"]
+    guildstr = str(ctx.guild.id)
+    meriter = strike_data["Author"]
     reason = strike_data["Reason"]
     if str(guild.id) not in self.db:
         return
+    if self.db[guildstr]["MODLOG"]["CHANNEL"] == False:
+        return
     if user == None:
         return
-    channelid = self.db[str(guild.id)]["CHANNEL"]
+    channelid = self.db[guildstr]["MODLOG"]["CHANNEL"]
     logchannel = guild.get_channel(int(channelid))
-    time = datetime.now()
-    fmt = '%H:%M:%S'
     name = str(user)
         
-    logmsg = '{} has recieved a strike from {}'.format(name, striker)
-    embedmsg = discord.Embed(title=logmsg, color=discord.Color.green())
+    logmsg = '{} has recieved a strike from {}'.format(name, meriter)
+    embedmsg = discord.Embed(title=logmsg, color=discord.Color.green(), timestamp=datetime.utcnow())
     embedmsg.add_field(name="Reason:", value=reason, inline=False)
     embedmsg.add_field(name="Strike ID:", value=str(strikeID), inline=False)
-    embedmsg.set_footer(text=time.strftime(fmt))
+    embedmsg.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
     await logchannel.send(embed=embedmsg)
     return
 
 async def log_merit(self, ctx, user, merit_data, meritID):
     guild = ctx.guild
+    guildstr = str(ctx.guild.id)
     meriter = merit_data["Author"]
     reason = merit_data["Reason"]
     if str(guild.id) not in self.db:
         return
-    if self.db[str(guild.id)]["toggleuser"] == False:
+    if self.db[guildstr]["MODLOG"]["CHANNEL"] == False:
         return
     if user == None:
         return
-    channelid = self.db[str(guild.id)]["CHANNEL"]
+    channelid = self.db[guildstr]["MODLOG"]["CHANNEL"]
     logchannel = guild.get_channel(int(channelid))
-    time = datetime.now()
-    fmt = '%H:%M:%S'
     name = str(user)
         
     logmsg = '{} has recieved a merit from {}'.format(name, meriter)
-    embedmsg = discord.Embed(title=logmsg, color=discord.Color.green())
+    embedmsg = discord.Embed(title=logmsg, color=discord.Color.green(), timestamp=datetime.utcnow())
     embedmsg.add_field(name="Reason:", value=reason, inline=False)
     embedmsg.add_field(name="Merit ID:", value=str(meritID), inline=False)
-    embedmsg.set_footer(text=time.strftime(fmt))
+    embedmsg.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
     await logchannel.send(embed=embedmsg)
     return
 
