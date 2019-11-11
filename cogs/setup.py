@@ -60,7 +60,8 @@ class Setup(commands.Cog, name="setup"):
             role = guild.get_role(int(self.db[guildstr]["VIP"]))
             embed.add_field(name="VIP user role:", value=role.name)
 
-        embed.add_field(name="Disabled features:", value=", ".join(disabled), inline=False)
+        if len(disabled) > 0:
+            embed.add_field(name="Disabled features:", value=", ".join(disabled), inline=False)
         await ctx.send(embed=embed)
 
     @commands.guild_only()
