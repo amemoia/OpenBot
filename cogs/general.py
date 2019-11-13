@@ -98,6 +98,8 @@ class General(commands.Cog, name='general'):
         if user.status == discord.Status.idle:
             game = "Idle"
 
+        if user.activity.type == None:
+            pass
         if user.activity.type == discord.ActivityType.playing:
             game = "Playing {}".format(user.activity.name)
         elif user.activity.type == discord.ActivityType.streaming:
