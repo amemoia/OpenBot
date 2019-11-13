@@ -99,13 +99,14 @@ async def log_strike(self, ctx, user, strike_data, strikeID):
     guildstr = str(ctx.guild.id)
     meriter = strike_data["Author"]
     reason = strike_data["Reason"]
-    if str(guild.id) not in self.db:
+    db = fileIO('data/write/setup.json', 'load')
+    if str(guild.id) not in db:
         return
-    if self.db[guildstr]["MODLOG"]["CHANNEL"] == False:
+    if db[guildstr]["MODLOG"]["CHANNEL"] == False:
         return
     if user == None:
         return
-    channelid = self.db[guildstr]["MODLOG"]["CHANNEL"]
+    channelid = db[guildstr]["MODLOG"]["CHANNEL"]
     logchannel = guild.get_channel(int(channelid))
     name = str(user)
         
@@ -122,13 +123,14 @@ async def log_merit(self, ctx, user, merit_data, meritID):
     guildstr = str(ctx.guild.id)
     meriter = merit_data["Author"]
     reason = merit_data["Reason"]
-    if str(guild.id) not in self.db:
+    db = fileIO('data/write/setup.json', 'load')
+    if str(guild.id) not in db:
         return
-    if self.db[guildstr]["MODLOG"]["CHANNEL"] == False:
+    if db[guildstr]["MODLOG"]["CHANNEL"] == False:
         return
     if user == None:
         return
-    channelid = self.db[guildstr]["MODLOG"]["CHANNEL"]
+    channelid = db[guildstr]["MODLOG"]["CHANNEL"]
     logchannel = guild.get_channel(int(channelid))
     name = str(user)
         
