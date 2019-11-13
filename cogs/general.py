@@ -129,7 +129,7 @@ class General(commands.Cog, name='general'):
                                "to send this")
 
     @commands.command(aliases=['hinfo', 'hackinfo'])
-    async def get_user(self, ctx, uid: int=0):
+    async def getuser(self, ctx, uid: int=0):
         """CATEG_GEN Finds info about a user based on their ID. Works on people that aren't in the current guild, but sends less info. The bot needs to share a guild with that user."""
         if uid == 0 or len(str(uid)) != 18:
             embed=discord.Embed(title="🔴 Error", description="Invalid ID.", color=0xdd2e44, timestamp=datetime.utcnow())
@@ -273,7 +273,7 @@ class General(commands.Cog, name='general'):
             await ctx.send("I need the `Embed links` permission to do this.")
 
     @commands.command(aliases=['hguild', 'hackguild'])
-    async def get_guild(self, ctx, uid: int = 0):
+    async def getguild(self, ctx, uid: int = 0):
         """CATEG_GEN Returns information on a guild with the given ID. The bot has to be a member of the guild."""
         if uid == 0 or len(str(uid)) != 18:
             embed=discord.Embed(title="🔴 Error", description="Invalid ID.", color=0xdd2e44, timestamp=datetime.utcnow())
