@@ -98,12 +98,11 @@ class General(commands.Cog, name='general'):
         if user.status == discord.Status.idle:
             game = "Idle"
 
-        if user.activity.type == None:
-            pass
-        if user.activity.type == discord.ActivityType.playing:
-            game = "Playing {}".format(user.activity.name)
-        elif user.activity.type == discord.ActivityType.streaming:
-            game = "Streaming: [{}]({})".format(user.activity.name, user.activity.url)
+        if user.activity.type != None:
+            if user.activity.type.name == "playing":
+                game = "Playing {}".format(user.activity.name)
+            if user.activity.type.name == "streaming":
+                game = "Streaming: [{}]({})".format(user.activity.name, user.activity.url)
 
         if roles:
             roles = sorted(roles, key=[x.name for x in guild.roles
