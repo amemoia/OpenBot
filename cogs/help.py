@@ -66,6 +66,11 @@ class Help(commands.Cog, name="help"):
                 if desc_categ == "CATEG_OWN" or desc_categ == "CATEG_NON" or desc_categ == "CATEG_SUB":
                     pass
 
+            general_list.sort()
+            fun_list.sort()
+            mod_list.sort()
+            admin_list.sort()
+
             general = " ".join(general_list)
             fun = " ".join(fun_list)
             mod = " ".join(mod_list)
@@ -123,7 +128,7 @@ class Help(commands.Cog, name="help"):
     async def botinfo(self, ctx):
         """CATEG_GEN Information about the bot."""
         embed = discord.Embed(title="🤖 About", description="Based on [OpenBot](https://github.com/notLeM/OpenBot), an open-source discord bot by [notLeM](https://github.com/notLeM).", timestamp=datetime.utcnow(), color=client_role_color(self, ctx))
-        embed.add_field(name="OpenBot version", value="Alpha 5.1")
+        embed.add_field(name="OpenBot version", value="Alpha 6")
         embed.add_field(name="Servers", value=len(self.client.guilds))
         embed.add_field(name="Commands", value=len(self.client.commands))
         embed.add_field(name="\u200b", value="[Invite]({}) • [OpenBot Website](https://notlem.github.io/)".format(discord.utils.oauth_url(client_id=self.client.user.id, permissions=discord.Permissions(permissions=1609952503))), inline=False)
