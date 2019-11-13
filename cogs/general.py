@@ -47,18 +47,25 @@ class General(commands.Cog, name='general'):
             mcount = len(dbm[str(guild.id)][str(user.id)])
         elif str(user.id) not in dbm[str(guild.id)] or str(guild.id) not in dbm:
             mcount = 0
+
+        if scount == 0:
+            sres = "None"
+        else:
+            sres = str(scount)
+        if mcount == 0:
+            mres = "None"
+        else:
+            mres = str(mcount)
             
 
         joined_at = user.joined_at
         since_created = (ctx.message.created_at - user.created_at).days
         since_joined = (ctx.message.created_at - joined_at).days
-        user_joined = joined_at.strftime("%d %b %Y %H:%M")
-        user_created = user.created_at.strftime("%d %b %Y %H:%M")
-        member_number = sorted(guild.members,
-                               key=lambda m: m.joined_at).index(user) + 1
+        user_joined = joined_at.strftime("%d %b %Y, %H:%M")
+        user_created = user.created_at.strftime("%d %b %Y, %H:%M")
 
-        created_on = "{}\n({} days ago)".format(user_created, since_created)
-        joined_on = "{}\n({} days ago)".format(user_joined, since_joined)
+        created_on = "{} ({} days ago)".format(user_created, since_created)
+        joined_on = "{} ({} days ago)".format(user_joined, since_joined)
 
         #    Bots cannot fetch profiles as of writing
         if 69 == 0:
@@ -91,9 +98,7 @@ class General(commands.Cog, name='general'):
         if user.status == discord.Status.idle:
             game = "Idle"
 
-        if user.activity is None:
-            pass
-        elif user.activity.type == discord.ActivityType.playing:
+        if user.activity.type == discord.ActivityType.playing:
             game = "Playing {}".format(user.activity.name)
         elif user.activity.type == discord.ActivityType.streaming:
             game = "Streaming: [{}]({})".format(user.activity.name, user.activity.url)
@@ -110,15 +115,13 @@ class General(commands.Cog, name='general'):
             name = "{} ({})".format(str(user), user.nick)
 
         data = discord.Embed(title=name, description=game, colour=client_role_color(self, ctx))
-        data.add_field(name="Joined Discord on", value=created_on)
-        data.add_field(name="Joined this server on", value=joined_on)
-        data.add_field(name="Strikes", value=str(scount))
-        data.add_field(name="Merits", value=str(mcount))
-        data.add_field(name="Married to", value="Marriage isn't implemented yet!", inline=True)
-        data.add_field(name="Roles", value=roles, inline=False)
-        data.set_footer(text="Member {} | User ID: {}"
-                             "".format(member_number, user.id))
-        data.set_author(name="🔵 User Profile")
+        data.add_field(name="📅 Joined Discord on", value=created_on, inline=False)
+        data.add_field(name="🗓️ Joined this server on", value=joined_on, inline=False)
+        data.add_field(name="🔨 Strikes", value=sres, inline=False)
+        data.add_field(name="🌟 Merits", value=mres, inline=False)
+        data.add_field(name="💍 Married to", value="Marriage isn't implemented yet!", inline=False)
+        data.add_field(name="🔧 Roles", value=roles, inline=False)
+        data.set_footer(text="User ID: {}".format(user.id))
 
         if user.avatar_url:
             data.set_thumbnail(url=user.avatar_url)
@@ -145,36 +148,14 @@ class General(commands.Cog, name='general'):
             return
 
         since_created = (ctx.message.created_at - user.created_at).days
-        user_created = user.created_at.strftime("%d %b %Y %H:%M")
-        created_on = "{}\n({} days ago)".format(user_created, since_created)
-
-        #    Bots cannot fetch profiles as of writing
-        if 69 == 0:
-            #nitro_since = "Not subscribed."
-            badgelist = []
-            profile = await user.profile()
-            if profile.staff == True:
-                badgelist.append("Staff")
-            if profile.partner == True:
-                badgelist.append("Discord Partner")
-            if profile.nitro == True:
-                badgelist.append("Nitro")
-                #nitro_days = (ctx.message.created_at - profile.premium_since).days
-                #nitro_since = "Since {}\n({} days ago)".format(profile.premium_since, nitro_days)
-            if profile.bug_hunter == True:
-                badgelist.append("Bug Hunter")
-            if profile.early_supporter == True:
-                badgelist.append("Early Supporter")
-            if profile.hypesquad == True:
-                house = ", ".join(profile.hypesquad_houses)
-                badgelist.append(house)
-            #badges = ", ".join(badgelist)
+        user_created = user.created_at.strftime("%d %b %Y, %H:%M")
+        created_on = "{} ({} days ago)".format(user_created, since_created)
 
         data = discord.Embed(title=str(user), colour=client_role_color(self, ctx))
-        data.add_field(name="Joined Discord on", value=created_on)
-        data.add_field(name="Married to", value="Marriage isn't implemented yet!", inline=True)
-        data.set_footer(text="User ID: {}".format(uid))
-        data.set_author(name="🔵 User Profile")
+        data.add_field(name="📅 Joined Discord on", value=created_on, inline=False)
+        data.add_field(name="🤖 Bot", value=str(user.bot), inline=False)
+        data.add_field(name="💍 Married to", value="Marriage isn't implemented yet!", inline=False)
+        data.add_field(name="#️⃣ User ID", value=str(user.id), inline=False)
 
         if user.avatar_url:
             data.set_thumbnail(url=user.avatar_url)
@@ -212,57 +193,55 @@ class General(commands.Cog, name='general'):
             boost_level = 3
 
         if guild.region == discord.VoiceRegion.amsterdam:
-            fancyregion = "🇳🇱 Amsterdam"
+            fancyregion = "🇳Amsterdam"
         elif guild.region == discord.VoiceRegion.brazil:
-            fancyregion = "🇧🇷 Brazil"
+            fancyregion = "Brazil"
         elif guild.region == discord.VoiceRegion.eu_central:
-            fancyregion = "🇪🇺 Central Europe"
+            fancyregion = "Central Europe"
         elif guild.region == discord.VoiceRegion.eu_west:
-            fancyregion = "🇪🇺 West Europe"
+            fancyregion = "West Europe"
         elif guild.region == discord.VoiceRegion.frankfurt:
-            fancyregion = "🇩🇪 Frankfurt"
+            fancyregion = "Frankfurt"
         elif guild.region == discord.VoiceRegion.hongkong:
-            fancyregion = "🇨🇳 Hong Kong"
+            fancyregion = "Hong Kong"
         elif guild.region == discord.VoiceRegion.japan:
-            fancyregion = "🇯🇵 Japan"
+            fancyregion = "Japan"
         elif guild.region == discord.VoiceRegion.london:
-            fancyregion = "🇬🇧 London"
+            fancyregion = "London"
         elif guild.region == discord.VoiceRegion.russia:
-            fancyregion = "🇷🇺 Russia"
+            fancyregion = "Russia"
         elif guild.region == discord.VoiceRegion.singapore:
-            fancyregion = "🇸🇬 Singapore"
+            fancyregion = "Singapore"
         elif guild.region == discord.VoiceRegion.southafrica:
-            fancyregion = "🇿🇦 South Africa"
+            fancyregion = "South Africa"
         elif guild.region == discord.VoiceRegion.sydney:
-            fancyregion = "🇦🇺 Sydney"
+            fancyregion = "Sydney"
         elif guild.region == discord.VoiceRegion.us_central:
-            fancyregion = "🇺🇸 US Central"
+            fancyregion = "US Central"
         elif guild.region == discord.VoiceRegion.us_east:
-            fancyregion = "🇺🇸 US East"
+            fancyregion = "US East"
         elif guild.region == discord.VoiceRegion.us_south:
-            fancyregion = "🇺🇸 US South"
+            fancyregion = "US South"
         elif guild.region == discord.VoiceRegion.us_west:
-            fancyregion = "🇺🇸 US West"
+            fancyregion = "US West"
         elif guild.region == discord.VoiceRegion.vip_amsterdam:
-            fancyregion = "🌟 VIP Amsterdam"
+            fancyregion = "VIP Amsterdam"
         elif guild.region == discord.VoiceRegion.vip_us_east:
-            fancyregion = "🌟 VIP US East"
+            fancyregion = "VIP US East"
         elif guild.region == discord.VoiceRegion.vip_us_west:
-            fancyregion = "🌟 VIP US West"
+            fancyregion = "VIP US West"
         elif guild.region == "europe":
-            fancyregion = "🇪🇺 Europe"
+            fancyregion = "Europe"
 
         data = discord.Embed(title=guild.name, description=created_at, colour=client_role_color(self, ctx))
-        data.add_field(name="Region", value=str(fancyregion))
-        data.add_field(name="Members", value="{} members, {} bots".format(total_users, bot_count))
-        data.add_field(name="Text Channels", value=text_channels)
-        data.add_field(name="Voice Channels", value=voice_channels)
-        data.add_field(name="Boosting Members", value=boosters)
-        data.add_field(name="Boost Level", value="Level {}".format(boost_level))
-        data.add_field(name="Roles", value=len(guild.roles))
-        data.add_field(name="Owner", value=str(guild.owner))
+        data.add_field(name="🌍 Region", value=str(fancyregion), inline=False)
+        data.add_field(name="👥 Members", value="{} members, {} bots".format(total_users, bot_count), inline=False)
+        data.add_field(name="💬 Text Channels", value=text_channels, inline=False)
+        data.add_field(name="🔊 Voice Channels", value=voice_channels, inline=False)
+        data.add_field(name="💠 Boosting", value="Level {}, {} boosters".format(boost_level, boosters), inline=False)
+        data.add_field(name="🔧 Roles", value=len(guild.roles), inline=False)
+        data.add_field(name="👑 Owner", value=str(guild.owner), inline=False)
         data.set_footer(text="Server ID: " + str(guild.id))
-        data.set_author(name="🔵 Server Information")
 
         if guild.icon_url:
             data.set_thumbnail(url=guild.icon_url)
@@ -311,57 +290,55 @@ class General(commands.Cog, name='general'):
             boost_level = 3
 
         if guild.region == discord.VoiceRegion.amsterdam:
-            fancyregion = "🇳🇱 Amsterdam"
+            fancyregion = "🇳Amsterdam"
         elif guild.region == discord.VoiceRegion.brazil:
-            fancyregion = "🇧🇷 Brazil"
+            fancyregion = "Brazil"
         elif guild.region == discord.VoiceRegion.eu_central:
-            fancyregion = "🇪🇺 Central Europe"
+            fancyregion = "Central Europe"
         elif guild.region == discord.VoiceRegion.eu_west:
-            fancyregion = "🇪🇺 West Europe"
+            fancyregion = "West Europe"
         elif guild.region == discord.VoiceRegion.frankfurt:
-            fancyregion = "🇩🇪 Frankfurt"
+            fancyregion = "Frankfurt"
         elif guild.region == discord.VoiceRegion.hongkong:
-            fancyregion = "🇨🇳 Hong Kong"
+            fancyregion = "Hong Kong"
         elif guild.region == discord.VoiceRegion.japan:
-            fancyregion = "🇯🇵 Japan"
+            fancyregion = "Japan"
         elif guild.region == discord.VoiceRegion.london:
-            fancyregion = "🇬🇧 London"
+            fancyregion = "London"
         elif guild.region == discord.VoiceRegion.russia:
-            fancyregion = "🇷🇺 Russia"
+            fancyregion = "Russia"
         elif guild.region == discord.VoiceRegion.singapore:
-            fancyregion = "🇸🇬 Singapore"
+            fancyregion = "Singapore"
         elif guild.region == discord.VoiceRegion.southafrica:
-            fancyregion = "🇿🇦 South Africa"
+            fancyregion = "South Africa"
         elif guild.region == discord.VoiceRegion.sydney:
-            fancyregion = "🇦🇺 Sydney"
+            fancyregion = "Sydney"
         elif guild.region == discord.VoiceRegion.us_central:
-            fancyregion = "🇺🇸 US Central"
+            fancyregion = "US Central"
         elif guild.region == discord.VoiceRegion.us_east:
-            fancyregion = "🇺🇸 US East"
+            fancyregion = "US East"
         elif guild.region == discord.VoiceRegion.us_south:
-            fancyregion = "🇺🇸 US South"
+            fancyregion = "US South"
         elif guild.region == discord.VoiceRegion.us_west:
-            fancyregion = "🇺🇸 US West"
+            fancyregion = "US West"
         elif guild.region == discord.VoiceRegion.vip_amsterdam:
-            fancyregion = "🌟 VIP Amsterdam"
+            fancyregion = "VIP Amsterdam"
         elif guild.region == discord.VoiceRegion.vip_us_east:
-            fancyregion = "🌟 VIP US East"
+            fancyregion = "VIP US East"
         elif guild.region == discord.VoiceRegion.vip_us_west:
-            fancyregion = "🌟 VIP US West"
+            fancyregion = "VIP US West"
         elif guild.region == "europe":
-            fancyregion = "🇪🇺 Europe"
+            fancyregion = "Europe"
 
         data = discord.Embed(title=guild.name, description=created_at, colour=client_role_color(self, ctx))
-        data.add_field(name="Region", value=str(fancyregion))
-        data.add_field(name="Members", value="{} members, {} bots".format(total_users, bot_count))
-        data.add_field(name="Text Channels", value=text_channels)
-        data.add_field(name="Voice Channels", value=voice_channels)
-        data.add_field(name="Boosting Members", value=boosters)
-        data.add_field(name="Boost Level", value="Level {}".format(boost_level))
-        data.add_field(name="Roles", value=len(guild.roles))
-        data.add_field(name="Owner", value=str(guild.owner))
+        data.add_field(name="🌍 Region", value=str(fancyregion), inline=False)
+        data.add_field(name="👥 Members", value="{} members, {} bots".format(total_users, bot_count), inline=False)
+        data.add_field(name="💬 Text Channels", value=text_channels, inline=False)
+        data.add_field(name="🔊 Voice Channels", value=voice_channels, inline=False)
+        data.add_field(name="💠 Boosting", value="Level {}, {} boosters".format(boost_level, boosters), inline=False)
+        data.add_field(name="🔧 Roles", value=len(guild.roles), inline=False)
+        data.add_field(name="👑 Owner", value=str(guild.owner), inline=False)
         data.set_footer(text="Server ID: " + str(guild.id))
-        data.set_author(name="🔵 Server Information")
 
         if guild.icon_url:
             data.set_thumbnail(url=guild.icon_url)
@@ -385,7 +362,7 @@ class General(commands.Cog, name='general'):
         except TypeError:
             return await ctx.send("Invalid calculation query.")
         try: 
-            em = discord.Embed(title='🔵 Calculator', color=client_role_color(self, ctx))
+            em = discord.Embed(title='🧮 Calculator', color=client_role_color(self, ctx))
             em.add_field(name='Input:', value=maths.replace('**', '^').replace('x', '*'), inline=False)
             em.add_field(name='Output:', value=answer, inline=False)
             await ctx.send(embed=em)
@@ -427,7 +404,7 @@ class General(commands.Cog, name='general'):
         if not user:
             user = ctx.message.author
         icon = user.avatar_url
-        embed=discord.Embed(title="🔵 Here's **{}'s** avatar.".format(user), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+        embed=discord.Embed(title="🖼️ Here's **{}'s** avatar.".format(user), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
         embed.set_image(url=str(icon))
         embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
         await ctx.send(embed=embed)
@@ -444,7 +421,7 @@ class General(commands.Cog, name='general'):
             embed.set_image(url=str(icon))
             await ctx.send(embed=embed)
         else:
-            embed=discord.Embed(title="🔵 Here's **{}'s** icon.".format(user), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+            embed=discord.Embed(title="🖼️ Here's **{}'s** icon.".format(user), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
             embed.set_image(url=str(icon))
             embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
             await ctx.send(embed=embed)
@@ -461,7 +438,7 @@ class General(commands.Cog, name='general'):
             embed.set_image(url=str(icon))
             await ctx.send(embed=embed)
         else:
-            embed=discord.Embed(title="🔵 Here's **{}'s** banner.".format(user), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+            embed=discord.Embed(title="🖼️ Here's **{}'s** banner.".format(user), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
             embed.set_image(url=str(icon))
             embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
             await ctx.send(embed=embed)
@@ -478,7 +455,7 @@ class General(commands.Cog, name='general'):
             embed.set_image(url=str(icon))
             await ctx.send(embed=embed)
         else:
-            embed=discord.Embed(title="🔵 Here's **{}'s** invite splash.".format(user), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+            embed=discord.Embed(title="🖼️ Here's **{}'s** invite splash.".format(user), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
             embed.set_image(url=str(icon))
             embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
             await ctx.send(embed=embed)

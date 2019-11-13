@@ -84,21 +84,21 @@ class Fun(commands.Cog, name="fun"):
     @commands.command(aliases=['8ball'])
     async def ask8(self, ctx):
         """CATEG_FUN Ask the almighty 8ball a question."""
-        response=(random.choice(["It is certain :8ball:",
-                                "It is decidedly so :8ball:",
-                                "Without a doubt :8ball:",
-                                "Yes, definitely :8ball:",
-                                "You may rely on it :8ball:",
-                                "As I see it, yes :8ball:",
-                                "Most likely :8ball:",
-                                "Outlook good :8ball:",
-                                "Yes :8ball:",
-                                "Signs point to yes :8ball:",
-                                "Don't count on it :8ball:",
-                                "My reply is no :8ball:",
-                                "My sources say no :8ball:",
-                                "Outlook not so good :8ball:",
-                                "Very doubtful :8ball:"]))
+        response=(random.choice(["It is certain.",
+                                "It is decidedly so.",
+                                "Without a doubt.",
+                                "Yes, definitely.",
+                                "You may rely on it.",
+                                "As I see it, yes.",
+                                "Most likely.",
+                                "Outlook good.",
+                                "Yes.",
+                                "Signs point to yes.",
+                                "Don't count on it.",
+                                "My reply is no.",
+                                "My sources say no.",
+                                "Outlook not so good.",
+                                "Very doubtful."]))
         embed=discord.Embed(title="🎱 8ball", description=response, color=client_role_color(self, ctx), timestamp=datetime.utcnow())
         embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
         await ctx.send(embed=embed)
@@ -168,12 +168,7 @@ class Fun(commands.Cog, name="fun"):
         elif user.id == 254204775497859073:
             n = int(0)
 
-        if n <= 50:
-            emoji = ":smile:"
-        if n > 50:
-            emoji = ":gay_pride_flag:"
-
-        embed=discord.Embed(title="🏳️‍🌈 Gay", description="{} is **{}% gay.** {}".format(user, n, emoji), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
+        embed=discord.Embed(title="🏳️‍🌈 Gay", description="{} is **{}% gay.**".format(user, n), color=client_role_color(self, ctx), timestamp=datetime.utcnow())
         embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
         await ctx.send(embed=embed)
 

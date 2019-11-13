@@ -211,8 +211,7 @@ class Mod(commands.Cog, name="mod"):
         mesg = ' '.join(args)
         user = ctx.message.author
         name = user.name
-        embed=discord.Embed(description=mesg, colour=client_role_color(self, ctx), timestamp=datetime.utcnow())
-        embed.set_author(name=name)
+        embed=discord.Embed(title="{} says:".format(name), description=mesg, colour=client_role_color(self, ctx), timestamp=datetime.utcnow())
         embed.set_thumbnail(url=user.avatar_url)
         await ctx.send(embed=embed)
 
