@@ -550,6 +550,9 @@ class Setup(commands.Cog, name="setup"):
         user = guild.get_member(user_notguild.id)
         channel = self.client.get_channel(reaction.channel_id)
         message = await channel.fetch_message(reaction.message_id)
+        for x in message.reactions:
+            if x.emoji == "⭐":
+                msgreacts = x.count
         guildstr = str(guild.id)
         if not str(guild.id) in self.db:
             return
@@ -559,7 +562,7 @@ class Setup(commands.Cog, name="setup"):
                 return
             if user == guild.me:
                 return
-            if reaction.count < 2:
+            if msgreacts < 2:
                 return
             
             channelid = self.db[str(guild.id)]["STARBOARD"]
