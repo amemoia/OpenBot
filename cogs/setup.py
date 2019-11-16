@@ -557,7 +557,7 @@ class Setup(commands.Cog, name="setup"):
         if reaction.emoji.name == "⭐":
             if self.db[str(guild.id)]["STARBOARD"] == None:
                 return
-            if reaction.user == guild.me:
+            if user == guild.me:
                 return
             if reaction.count < 3:
                 return
