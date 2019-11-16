@@ -550,11 +550,14 @@ class Setup(commands.Cog, name="setup"):
         user = guild.get_member(user_notguild.id)
         channel = self.client.get_channel(reaction.channel_id)
         message = await channel.fetch_message(reaction.message_id)
+        msgreacts = 0
         for x in message.reactions:
             if x.emoji == "⭐":
                 msgreacts = x.count
         guildstr = str(guild.id)
         if not str(guild.id) in self.db:
+            return
+        if msgreacts == 0:
             return
 
         if reaction.emoji.name == "⭐":
@@ -566,22 +569,19 @@ class Setup(commands.Cog, name="setup"):
                 return
             
             channelid = self.db[str(guild.id)]["STARBOARD"]
-            channel = guild.get_channel(int(channelid))
+            channelx = guild.get_channel(int(channelid))
 
-            try:
-                msgcheck = await channel.fetch_message(message.id)
-                if msgcheck != None:
-                    return
-                if msgcheck == None:
-                    pass
-            except discord.NotFound:
-                pass
-
-            embed = discord.Embed(title="New star! :star:", color=0xffcd4c, timestamp=datetime.utcnow())
+            embed = discord.Embed(title="New star! :star:", color=0xffcd4c)
             embed.add_field(name="Author", value=str(message.author))
             embed.add_field(name="Channel", value=message.channel.mention)
             embed.add_field(name="Message", value="[Jump]({})".format(message.jump_url))
             embed.set_footer(icon_url=self.client.user.avatar_url, text=self.client.user.name)
+
+            async for x in channelx.history(limit=200):
+                for y in x.embeds:
+                    for z in y.fields:
+                        if z.value == '[Jump]({})'.format(message.jump_url):
+                            return
 
             if message.content != '' and message.content != None:
                 content = message.content
@@ -592,7 +592,7 @@ class Setup(commands.Cog, name="setup"):
                     if x.filename.endswith(".png") or x.filename.endswith(".gif") or x.filename.endswith(".jpg") or x.filename.endswith(".jpeg"):
                         embed.set_image(url=x.url)
 
-            await channel.send(embed=embed)
+            await channelx.send(embed=embed)
             pass
 
         elif reaction.emoji.name in self.coloremoji: #['❤️', '💛', '💚', '💙', '💜']
