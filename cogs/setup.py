@@ -559,7 +559,7 @@ class Setup(commands.Cog, name="setup"):
                 return
             if user == guild.me:
                 return
-            if reaction.count < 3:
+            if reaction.count < 2:
                 return
             
             channelid = self.db[str(guild.id)]["STARBOARD"]
