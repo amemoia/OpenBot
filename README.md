@@ -5,7 +5,7 @@
   <br>
 </p>
 
-## Discontinued
+### Discontinued
 While I've moved onto other projects meant to replace the mess that this bot was, feel free to frankenstein it into something of your own.
 Follow the guide below to get started,
 
