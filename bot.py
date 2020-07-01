@@ -5,11 +5,9 @@ import cogs.tools as tools
 from datetime import datetime
 
 
-
 #       Customization options can be found in settings.json!
 #       Please do not touch anything else unless
 #       you know what you're doing!
-
 
 
 tools.settingscheck()
